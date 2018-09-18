@@ -11,17 +11,17 @@ y = 50
 # init of global var
 
 
-def character_movetopoint(destX, destY):
+def character_point(destination_x, destination_y):
     global x
     global y
-    while x != destX or y != destY:
-        if x < destX:
+    while x != destination_x or y != destination_y:
+        if x < destination_x:
             x += 1
-        if y < destY:
+        if y < destination_y:
             y += 1
-        if x > destX:
+        if x > destination_x:
             x -= 1
-        if y > destY:
+        if y > destination_y:
             y -= 1
         character_rend()
     pass
@@ -39,7 +39,7 @@ DestinationList = [203, 535, 132, 243, 535, 470, 477, 203, 715, 136, 316, 225, 5
 
 while True:
     index = 0
-    character_movetopoint(DestinationList[index],DestinationList[index+1])
+    character_point(DestinationList[index], DestinationList[index+1])
     index = index + 2
 
 
