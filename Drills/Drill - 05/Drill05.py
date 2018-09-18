@@ -28,10 +28,11 @@ def character_point(destination_x, destination_y):
 
 
 def character_rend():
-    clear_canvas_now()
-    grass.draw_now(400, 30)
-    character.draw_now(x, y)
-    delay(0.01)
+    clear_canvas()
+    grass.draw(400, 30)
+    character.draw(x, y)
+    delay(0.001)
+    update_canvas()
 
 
 DestinationList = [203, 535, 132, 243, 535, 470, 477, 203, 715, 136, 316, 225, 510, 92, 692, 518, 682, 336, 712, 349]
@@ -41,7 +42,6 @@ while True:
     index = 0
     character_point(DestinationList[index], DestinationList[index+1])
     index = index + 2
-
 
 
 close_canvas()
