@@ -58,9 +58,9 @@ def character_rotate_rend():
     if d1 is True and d2 is True:
         rad = 45
     if d1 is True and d4 is True:
-        rad = 135
-    if d3 is True and d2 is True:
         rad = 315
+    if d3 is True and d2 is True:
+        rad = 135
     if d3 is True and d4 is True:
         rad = 225
 
