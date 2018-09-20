@@ -16,6 +16,9 @@ def handle_events():
             running = False
 
 
+def character_move()
+    pass
+
 open_canvas(KPU_WIDTH, KPU_HEIGHT)
 kpu_ground = load_image('KPU_GROUND.png')
 character = load_image('animation_sheet.png')
@@ -24,6 +27,7 @@ mouse = load_image('hand_arrow.png')
 running = True
 mx, my = KPU_WIDTH // 2, KPU_HEIGHT // 2
 x, y = 10, 10
+clickx, clicky = 10, 10
 frame = 0
 hide_cursor()
 
@@ -37,6 +41,7 @@ while running:
 
     delay(0.02)
     handle_events()
+    character_move()
 
 close_canvas()
 
