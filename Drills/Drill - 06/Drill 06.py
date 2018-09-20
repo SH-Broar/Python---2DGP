@@ -18,8 +18,13 @@ def handle_events():
             running = False
 
 
-def character_move()
-    pass
+def character_move():
+    global clickx, clicky, x, y
+    if clickx != x:
+        if clicky != y:
+            x += (clickx - x) / 10
+            y += (clicky - y) / 10
+
 
 open_canvas(KPU_WIDTH, KPU_HEIGHT)
 kpu_ground = load_image('KPU_GROUND.png')
