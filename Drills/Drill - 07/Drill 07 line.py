@@ -29,6 +29,11 @@ def draw_line_2_points(p1, p2):
     x1, y1 = p1[0], p1[1]
     x2, y2 = p2[0], p2[1]
 
+    if (x1 > x2):
+        flip = 1
+    else:
+        flip = 0
+
     for i in range(0, 100 + 1, 2):
         t = i / 100
         x = (1 - t) * p1[0] + t * p2[0]
@@ -47,9 +52,8 @@ points = [(random.randint(0, 600), random.randint(0, 600)) for i in range(size)]
 
 while running:
     clear_canvas()
-
-    draw_line_2_points(points[frame-1], points[frame])
-    frame = (frame+1) % 8
+    draw_line_2_points(points[pFrame - 1], points[pFrame])
+    pFrame = (pFrame + 1) % 20
 
 close_canvas()
 
