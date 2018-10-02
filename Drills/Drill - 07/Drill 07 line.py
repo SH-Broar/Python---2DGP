@@ -18,7 +18,10 @@ def draw_point(p):
     kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
     frame = (frame + 3) % 8
 
-    character.clip_draw(frame * 100, 100 * 1, 100, 100, p[0], p[1])
+    if (flip == 0):
+        character.clip_draw(frame * 100, 100 * 1, 100, 100, p[0], p[1])
+    else:
+        character.clip_draw(frame * 100, 100 * 0, 100, 100, p[0], p[1])
 
     update_canvas()
     delay(0.02)
