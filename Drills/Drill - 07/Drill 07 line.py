@@ -29,6 +29,13 @@ points = [(random.randint(-500, 500), random.randint(-350, 350)) for i in range(
 
 while running:
     clear_canvas()
+
+    kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
+    frame = (frame + 3) % 8
+    character.clip_draw(frame * 100, 100 * 1, 100, 100, 300, 300)
+
+    update_canvas()
+    delay(0.02)
     draw_line_2_points(points[frame-1], points[frame])
     frame = (frame+1) % 10
 
