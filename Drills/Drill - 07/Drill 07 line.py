@@ -26,23 +26,30 @@ def draw_point(p):
 
 def draw_line_2_points(p1, p2):
     global flip
+    x1, y1 = p1[0], p1[1]
+    x2, y2 = p2[0], p2[1]
+
+    for i in range(0, 100 + 1, 2):
+        t = i / 100
+        x = (1 - t) * p1[0] + t * p2[0]
+        y = (1 - t) * p1[1] + t * p2[1]
+        draw_point((x, y))
 
     draw_point(p2)
-    pass
 
 
 open_canvas(KPU_WIDTH, KPU_HEIGHT)
 kpu_ground = load_image('KPU_GROUND.png')
 character = load_image('animation_sheet.png')
 
-size = 10
-points = [(random.randint(-500, 500), random.randint(-350, 350)) for i in range(size)]
+size = 20
+points = [(random.randint(0, 600), random.randint(0, 600)) for i in range(size)]
 
 while running:
     clear_canvas()
 
     draw_line_2_points(points[frame-1], points[frame])
-    frame = (frame+1) % 10
+    frame = (frame+1) % 8
 
 close_canvas()
 
