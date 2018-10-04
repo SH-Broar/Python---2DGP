@@ -17,7 +17,7 @@ def draw_stamp():
     global stamp
     stamp = stamp + 8 % 8
     for i in range(-3, stamp-3):
-        character.clip_draw(100, 100 * 1, 100, 100, points[i][0], points[i][1])
+        character.clip_draw(100, 100 * dir[i], 100, 100, points[i][0], points[i][1])
     pass
 
 def draw_point(p):
@@ -41,6 +41,7 @@ def draw_curve_5_points(p1, p2, p3, p4, p5):
     global pre
     global flip
     global stamp
+    global dir
     x1, y1 = p1[0], p1[1]
     x2, y2 = p2[0], p2[1]
 
@@ -101,7 +102,10 @@ character = load_image('animation_sheet.png')
 
 size = 10
 points = [(random.randint(0, 600), random.randint(0, 600)) for i in range(size)]
-
+dir = [1 for i in range(10)]
+for i in range(10):
+    if points[i-1][0] > points[i][0]:
+        dir[i] = 0
 
 while running:
     clear_canvas()
