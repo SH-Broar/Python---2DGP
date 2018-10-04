@@ -19,12 +19,45 @@ def draw_point(p):
     kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
     frame = (frame + 3) % 8
 
+    character.clip_draw(frame * 100, 100 * 1, 100, 100, p[0], p[1])
+
     update_canvas()
     delay(0.02)
 
 
 def draw_curve_5_points(p1, p2, p3, p4, p5):
-    pass
+    global pre
+    global flip
+    x1, y1 = p1[0], p1[1]
+    x2, y2 = p2[0], p2[1]
+
+    # draw p1-p2
+    for i in range(0, 100, 2):
+        t = i / 100
+        x = ((-t ** 3 + 2 * t ** 2 - t) * p5[0] + (3 * t ** 3 - 5 * t ** 2 + 2) * p1[0] + (
+                    -3 * t ** 3 + 4 * t ** 2 + t) * p2[0] + (t ** 3 - t ** 2) * p3[0]) / 2
+        y = ((-t ** 3 + 2 * t ** 2 - t) * p5[1] + (3 * t ** 3 - 5 * t ** 2 + 2) * p1[1] + (
+                    -3 * t ** 3 + 4 * t ** 2 + t) * p2[1] + (t ** 3 - t ** 2) * p3[1]) / 2
+        draw_point((x, y))
+    draw_point(p2)
+
+    # draw p2-p3
+    for i in range(0, 100, 2):
+        t = i / 100
+        x = ((-t**3 + 2*t**2 - t)*p1[0] + (3*t**3 - 5*t**2 + 2)*p2[0] + (-3*t**3 + 4*t**2 + t)*p3[0] + (t**3 - t**2)*p4[0])/2
+        y = ((-t**3 + 2*t**2 - t)*p1[1] + (3*t**3 - 5*t**2 + 2)*p2[1] + (-3*t**3 + 4*t**2 + t)*p3[1] + (t**3 - t**2)*p4[1])/2
+        draw_point((x, y))
+    draw_point(p3)
+
+    # draw p3-p4
+    for i in range(0, 100, 2):
+        t = i / 100
+        x = ((-t ** 3 + 2 * t ** 2 - t) * p2[0] + (3 * t ** 3 - 5 * t ** 2 + 2) * p3[0] + (
+                    -3 * t ** 3 + 4 * t ** 2 + t) * p4[0] + (t ** 3 - t ** 2) * p5[0]) / 2
+        y = ((-t ** 3 + 2 * t ** 2 - t) * p2[1] + (3 * t ** 3 - 5 * t ** 2 + 2) * p3[1] + (
+                    -3 * t ** 3 + 4 * t ** 2 + t) * p4[1] + (t ** 3 - t ** 2) * p5[1]) / 2
+        draw_point((x, y))
+    draw_point(p4)
 
 
 open_canvas(KPU_WIDTH, KPU_HEIGHT)
