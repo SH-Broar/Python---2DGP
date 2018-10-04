@@ -135,7 +135,15 @@ def draw_curve_5_points(p1, p2, p3, p4, p5): #only for recursion
         draw_point((x, y))
     draw_point(p4)
 
-pass
+    # draw p4-p5
+    for i in range(0, 100, 2):
+        t = i / 100
+        x = ((-t ** 3 + 2 * t ** 2 - t) * p3[0] + (3 * t ** 3 - 5 * t ** 2 + 2) * p4[0] + (
+                -3 * t ** 3 + 4 * t ** 2 + t) * p1[0] + (t ** 3 - t ** 2) * p2[0]) / 2
+        y = ((-t ** 3 + 2 * t ** 2 - t) * p3[1] + (3 * t ** 3 - 5 * t ** 2 + 2) * p4[1] + (
+                -3 * t ** 3 + 4 * t ** 2 + t) * p1[1] + (t ** 3 - t ** 2) * p2[1]) / 2
+        draw_point((x, y))
+    draw_point(p5)
 
 
 prepare_turtle_canvas()
