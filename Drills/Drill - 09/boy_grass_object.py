@@ -34,10 +34,10 @@ class Ball41:
         self.image = load_image('ball41x41.png')
 
     def update(self):
-        if self.y > 80:
+        if self.y > 70:
             self.y -= self.dropSpeed
         else:
-            self.y = 80
+            self.y = 70
 
     def draw(self):
         self.image.draw(self.x, self.y)
@@ -59,12 +59,18 @@ class Boy:
 
 def handle_events():
     global running
+    global stop
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            if stop is True:
+                stop = False
+            else:
+                stop = True
 
 
 # initialization code
@@ -77,17 +83,19 @@ ball41s = [Ball41() for i in range(20-ballcut)]
 grass = Grass()
 
 running = True
+stop = False
 
 # game main loop code
 while running:
     handle_events()
 
-    for boy in team:
-        boy.update()
-    for ball21 in ball21s:
-        ball21.update()
-    for ball41 in ball41s:
-        ball41.update()
+    if stop is False:
+        for boy in team:
+            boy.update()
+        for ball21 in ball21s:
+            ball21.update()
+        for ball41 in ball41s:
+            ball41.update()
 
     clear_canvas()
     grass.draw()
