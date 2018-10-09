@@ -1,6 +1,7 @@
 from pico2d import *
 import random
 
+
 # Game object class here
 class Grass:
     def __init__(self):
@@ -40,7 +41,7 @@ open_canvas()
 team = [Boy() for i in range(11)]
 grass = Grass()
 
-running = True;
+running = True
 
 # game main loop code
 while running:
@@ -56,6 +57,7 @@ while running:
     update_canvas()
 
     delay(0.05)
+
 
 # finalization code
 close_canvas()
