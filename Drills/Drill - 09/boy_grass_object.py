@@ -13,8 +13,8 @@ class Grass:
 
 class Ball21:
     def __init__(self):
-        self.x, self.y = random.randint(21, 779), random.randint(400, 500)
-        self.dropSpeed = random.randint(5, 25)
+        self.x, self.y = random.randint(21, 779), 599
+        self.dropSpeed = random.randint(4, 25)
         self.image = load_image('ball21x21.png')
 
     def update(self):
@@ -29,8 +29,8 @@ class Ball21:
 
 class Ball41:
     def __init__(self):
-        self.x, self.y = random.randint(21, 779), random.randint(400, 500)
-        self.dropSpeed = random.randint(5, 25)
+        self.x, self.y = random.randint(21, 779), 599
+        self.dropSpeed = random.randint(4, 25)
         self.image = load_image('ball41x41.png')
 
     def update(self):
@@ -76,7 +76,7 @@ def handle_events():
 # initialization code
 open_canvas()
 
-ballcut = random.randint(0, 20)
+ballcut = random.randint(5, 15)
 team = [Boy() for i in range(11)]
 ball21s = [Ball21() for i in range(ballcut)]
 ball41s = [Ball41() for i in range(20-ballcut)]
