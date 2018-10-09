@@ -11,6 +11,19 @@ class Grass:
         self.image.draw(400, 30)
 
 
+class Ball21:
+    def __init__(self):
+        self.x, self.y = random.randint(21, 779), random.randint(400, 500)
+        self.dropSpeed = random.randint(5, 25)
+        self.image = load_image('ball21x21.png')
+
+    def update(self):
+        self.y -= self.dropSpeed
+
+    def draw(self):
+        self.image.draw(self.x,self.y)
+
+
 class Boy:
     def __init__(self):
         self.x, self.y = random.randint(100, 700), 90
