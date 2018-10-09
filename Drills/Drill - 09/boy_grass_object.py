@@ -18,10 +18,29 @@ class Ball21:
         self.image = load_image('ball21x21.png')
 
     def update(self):
-        self.y -= self.dropSpeed
+        if self.y > 60:
+            self.y -= self.dropSpeed
+        else:
+            self.y = 60
 
     def draw(self):
-        self.image.draw(self.x,self.y)
+        self.image.draw(self.x, self.y)
+
+
+class Ball41:
+    def __init__(self):
+        self.x, self.y = random.randint(21, 779), random.randint(400, 500)
+        self.dropSpeed = random.randint(5, 25)
+        self.image = load_image('ball41x41.png')
+
+    def update(self):
+        if self.y > 80:
+            self.y -= self.dropSpeed
+        else:
+            self.y = 80
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
 
 
 class Boy:
@@ -51,8 +70,10 @@ def handle_events():
 # initialization code
 open_canvas()
 
+ballcut = random.randint(0, 20)
 team = [Boy() for i in range(11)]
-balls = [Ball21() for i in range(20)]
+ball21s = [Ball21() for i in range(ballcut)]
+ball41s = [Ball41() for i in range(20-ballcut)]
 grass = Grass()
 
 running = True
@@ -63,15 +84,19 @@ while running:
 
     for boy in team:
         boy.update()
-    for ball21 in balls:
+    for ball21 in ball21s:
         ball21.update()
+    for ball41 in ball41s:
+        ball41.update()
 
     clear_canvas()
     grass.draw()
     for boy in team:
         boy.draw()
-    for ball21 in balls:
+    for ball21 in ball21s:
         ball21.draw()
+    for ball41 in ball41s:
+        ball41.draw()
     update_canvas()
 
     delay(0.05)
