@@ -28,6 +28,8 @@ def draw():
     global image
     global clicker
     clear_canvas()
+    main_state.grass.draw()
+    main_state.boy.draw()
     if (clicker < 100):
         image.draw(400, 300)
     update_canvas()
