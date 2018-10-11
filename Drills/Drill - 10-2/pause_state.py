@@ -28,7 +28,8 @@ def draw():
     global image
     global clicker
     clear_canvas()
-
+    if (clicker < 20):
+        image.draw(400, 300)
     update_canvas()
 
 
