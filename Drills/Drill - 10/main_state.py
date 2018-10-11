@@ -6,7 +6,7 @@ from pico2d import *
 
 import game_framework
 import title_state
-#import pause_state
+import pause_state
 
 
 name = "MainState"
@@ -14,6 +14,7 @@ name = "MainState"
 boy = None
 grass = None
 font = None
+
 
 class Grass:
     def __init__(self):
@@ -71,8 +72,8 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.change_state(title_state)
-        #elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
-            #game_framework.push_state(pause_state)
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
+            game_framework.push_state(pause_state)
 
 
 def update():
