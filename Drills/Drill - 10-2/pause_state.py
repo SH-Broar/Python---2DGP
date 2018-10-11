@@ -9,6 +9,7 @@ logo_time = 0.0
 
 clicker = 0
 
+
 def enter():
     global image
     image = load_image('pause.png')
@@ -33,7 +34,6 @@ def draw():
     if (clicker < 100):
         image.draw(400, 300)
     update_canvas()
-
 
 
 def handle_events():

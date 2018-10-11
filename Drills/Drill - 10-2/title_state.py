@@ -29,16 +29,10 @@ def handle_events():
                 game_framework.change_state(main_state)
 
 
-
 def draw():
     clear_canvas()
     image.draw(400,300)
     update_canvas()
-
-
-
-
-
 
 
 def update():
