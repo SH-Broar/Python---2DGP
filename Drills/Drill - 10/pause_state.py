@@ -5,7 +5,6 @@ from pico2d import *
 
 name = "PauseState"
 image = None
-logo_time = 0.0
 
 
 def enter():
@@ -27,7 +26,6 @@ def draw():
     clear_canvas()
     image.draw(400,300)
     update_canvas()
-
 
 
 def handle_events():
