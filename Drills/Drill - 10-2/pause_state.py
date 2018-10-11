@@ -21,14 +21,14 @@ def exit():
 
 def update():
     global clicker
-    clicker = (clicker + 1) % 40
+    clicker = (clicker + 1) % 200
 
 
 def draw():
     global image
     global clicker
     clear_canvas()
-    if (clicker < 20):
+    if (clicker < 100):
         image.draw(400, 300)
     update_canvas()
 
