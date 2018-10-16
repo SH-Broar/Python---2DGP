@@ -12,7 +12,7 @@ import pause_state
 
 name = "MainState"
 
-boy = None
+player = None
 grass = None
 font = None
 
@@ -25,35 +25,35 @@ class Grass:
         self.image.draw(400, 30)
 
 
-class Boy:
+class Player:
     def __init__(self):
         self.x, self.y = 0, 90
         self.frame = 0
-        self.image = load_image('run_animation.png')
+        self.image = load_image('Player\\player.png')
         self.dir = 1
 
     def update(self):
-        self.frame = (self.frame + 1) % 8
-        self.x += self.dir
-        if self.x >= 800:
-            self.dir = -1
-        elif self.x <= 0:
-            self.dir = 1
+        pass
 
     def draw(self):
-        self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
+        self.image.draw(self.x,self.y,50,50)
+
+    def setPosition(self,x,y):
+        self.x += x
+        self.y += y
+
 
 
 def enter():
-    global boy, grass
-    if (boy == None):
-        boy = Boy()
+    global player, grass
+    if (player == None):
+        player = Player()
         grass = Grass()
 
 
 def exit():
-    global boy, grass
-    del(boy)
+    global player, grass
+    del(player)
     del(grass)
 
 
@@ -67,6 +67,7 @@ def resume():
 
 
 def handle_events():
+    global player
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -76,15 +77,24 @@ def handle_events():
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
             game_framework.push_state(pause_state)
 
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
+            player.setPosition(-2,0)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
+            player.setPosition(2, 0)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
+            player.setPosition(0, 2)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
+            player.setPosition(0, -2)
+
 
 def update():
-    boy.update()
+    player.update()
 
 
 def draw():
     clear_canvas()
     grass.draw()
-    boy.draw()
+    player.draw()
     update_canvas()
 
 
