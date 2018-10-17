@@ -27,7 +27,7 @@ class Grass:
 
 class Player:
     def __init__(self):
-        self.x, self.y = 0, 90
+        self.x, self.y = 50, 90
         self.frame = 0
         self.image = load_image('Player\\player.png')
         self.dir = 1
@@ -78,13 +78,13 @@ def handle_events():
             game_framework.push_state(pause_state)
 
         elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
-            player.setPosition(-2,0)
+            player.setPosition(-50,0)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
-            player.setPosition(2, 0)
+            player.setPosition(50, 0)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
-            player.setPosition(0, 2)
+            player.setPosition(0, 50)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
-            player.setPosition(0, -2)
+            player.setPosition(0, -50)
 
 
 def update():
