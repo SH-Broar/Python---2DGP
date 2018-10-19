@@ -28,15 +28,26 @@ class Grass:
 class Player:
     def __init__(self):
         self.x, self.y = 50, 90
+        self.jump = 50
+        self.jumpHeight = 0
+        self.dir = 0 # 0 up 1 down
         self.frame = 0
         self.image = load_image('Player\\player.png')
         self.dir = 1
 
     def update(self):
+        if self.dir == 0:
+            self.jumpHeight += 1
+            if self.jumpHeight >= self.jump:
+                self.dir = 1
+        else:
+            self.jumpHeight -= 1
+            if self.jumpHeight <= 0:
+                self.dir = 0
         pass
 
     def draw(self):
-        self.image.draw(self.x,self.y,50,50)
+        self.image.draw(self.x,self.y + self.jumpHeight,50,50)
 
     def setPosition(self,x,y):
         self.x += x
