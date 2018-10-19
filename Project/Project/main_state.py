@@ -43,7 +43,6 @@ class Player:
         self.y += y
 
 
-
 def enter():
     global player, grass
     if (player == None):
