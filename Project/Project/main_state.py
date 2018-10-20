@@ -28,7 +28,7 @@ class Grass:
 class Player:
     def __init__(self):
         self.x, self.y = 50, 90
-        self.jump = 50
+        self.jump = 150
         self.jumpHeight = 0
         self.dir = 0 # 0 up 1 down
         self.frame = 0
@@ -87,13 +87,13 @@ def handle_events():
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
             game_framework.push_state(pause_state)
 
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT and player.jumpHeight < 20:
             player.setPosition(-50,0)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT and player.jumpHeight < 20:
             player.setPosition(50, 0)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and player.jumpHeight < 20:
             player.setPosition(0, 50)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN and player.jumpHeight < 20:
             player.setPosition(0, -50)
 
 
