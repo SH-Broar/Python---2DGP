@@ -34,6 +34,7 @@ class Player:
         self.frame = 0
         self.image = load_image('Player\\player.png')
         self.dir = 1
+        self.CtrlKeyDown = 1
 
     def update(self):
         if self.dir == 0:
@@ -86,15 +87,18 @@ def handle_events():
             game_framework.change_state(title_state)
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
             game_framework.push_state(pause_state)
-
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LCTRL):
+            player.CtrlKeyDown = 3
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_LCTRL):
+            player.CtrlKeyDown = 1
         elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT and player.jumpHeight < 20:
-            player.setPosition(-50,0)
+            player.setPosition(-50 * player.CtrlKeyDown,0)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT and player.jumpHeight < 20:
-            player.setPosition(50, 0)
+            player.setPosition(50 * player.CtrlKeyDown, 0)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and player.jumpHeight < 20:
-            player.setPosition(0, 50)
+            player.setPosition(0, 50 * player.CtrlKeyDown)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN and player.jumpHeight < 20:
-            player.setPosition(0, -50)
+            player.setPosition(0, -50 * player.CtrlKeyDown)
 
 
 def update():
