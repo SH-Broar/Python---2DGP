@@ -18,7 +18,7 @@ def exit():
     del(image)
 
 
-def update():
+def update(fDeltaTime):
     global logo_time
 
     if (logo_time > 1.0):
@@ -29,14 +29,14 @@ def update():
     logo_time += 0.01
 
 
-def draw():
+def draw(fDeltaTime):
     global image
     clear_canvas()
     image.draw(400,300)
     update_canvas()
 
 
-def handle_events():
+def handle_events(fDeltaTime):
     events = get_events()
     pass
 

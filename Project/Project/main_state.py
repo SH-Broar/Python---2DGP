@@ -16,6 +16,13 @@ player = None
 grass = None
 font = None
 
+BGM = None
+
+class Stage1_Bgm:
+    def __init__(self):
+        self.bgm = load_music('1City.mp3')
+        self.bgm.set_volume(64)
+        self.bgm.repeat_play()
 
 class Grass:
     def __init__(self):
@@ -27,8 +34,8 @@ class Grass:
 
 class Player:
     def __init__(self):
-        self.x, self.y = 50, 90
-        self.jump = 150
+        self.x, self.y = 50, 80
+        self.jump = 139
         self.jumpHeight = 0
         self.dir = 0 # 0 up 1 down
         self.frame = 0
@@ -36,15 +43,17 @@ class Player:
         self.dir = 1
         self.CtrlKeyDown = 1
 
-    def update(self):
+    def update(self,fDeltaTime):
         if self.dir == 0:
-            self.jumpHeight += 1
+            self.jumpHeight += 1970 / ((self.jumpHeight+100)/50) * fDeltaTime
             if self.jumpHeight >= self.jump:
                 self.dir = 1
         else:
-            self.jumpHeight -= 1
+            self.jumpHeight -= 1975 / ((self.jumpHeight+100)/50) * fDeltaTime
+            self.jumpHeight -= 10*fDeltaTime
             if self.jumpHeight <= 0:
                 self.dir = 0
+                self.jumpHeight = 0
         pass
 
     def draw(self):
@@ -54,21 +63,30 @@ class Player:
         self.x += x
         self.y += y
 
+    def pressKey(self):
+        pass
+
 
 def enter():
-    global player, grass
+    global player, grass, BGM
     if (player == None):
         player = Player()
         grass = Grass()
+    if BGM is None:
+        BGM = Stage1_Bgm()
+    else:
+        BGM.bgm.repeat_play()
 
 
 def exit():
-    global player, grass
+    global player, grass, BGM
     del(player)
     del(grass)
+    BGM = None
 
 
 def pause():
+
     pass
 
 
@@ -77,7 +95,8 @@ def resume():
     pass
 
 
-def handle_events():
+
+def handle_events(fDeltaTime):
     global player
     events = get_events()
     for event in events:
@@ -91,21 +110,25 @@ def handle_events():
             player.CtrlKeyDown = 3
         elif (event.type, event.key) == (SDL_KEYUP, SDLK_LCTRL):
             player.CtrlKeyDown = 1
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT and player.jumpHeight < 20:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT and player.jumpHeight < 50:
             player.setPosition(-50 * player.CtrlKeyDown,0)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT and player.jumpHeight < 20:
+            player.pressKey()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT and player.jumpHeight < 50:
             player.setPosition(50 * player.CtrlKeyDown, 0)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and player.jumpHeight < 20:
+            player.pressKey()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and player.jumpHeight < 50:
             player.setPosition(0, 50 * player.CtrlKeyDown)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN and player.jumpHeight < 20:
+            player.pressKey()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN and player.jumpHeight < 50:
             player.setPosition(0, -50 * player.CtrlKeyDown)
+            player.pressKey()
 
 
-def update():
-    player.update()
+def update(fDeltaTime):
+    player.update(fDeltaTime)
 
 
-def draw():
+def draw(fDeltaTime):
     clear_canvas()
     grass.draw()
     player.draw()

@@ -20,12 +20,12 @@ def exit():
     del(image)
 
 
-def update():
+def update(fDeltaTime):
     global clicker
     clicker = (clicker + 1) % 200
 
 
-def draw():
+def draw(fDeltaTime):
     global image
     global clicker
     clear_canvas()
@@ -36,7 +36,7 @@ def draw():
     update_canvas()
 
 
-def handle_events():
+def handle_events(fDeltaTime):
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:

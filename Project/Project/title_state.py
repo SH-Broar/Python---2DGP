@@ -17,7 +17,7 @@ def exit():
     del(image)
 
 
-def handle_events():
+def handle_events(fDeltaTime):
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -29,13 +29,13 @@ def handle_events():
                 game_framework.change_state(main_state)
 
 
-def draw():
+def draw(fDeltaTime):
     clear_canvas()
     image.draw(400,300)
     update_canvas()
 
 
-def update():
+def update(fDeltaTime):
     pass
 
 
