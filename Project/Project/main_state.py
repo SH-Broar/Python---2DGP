@@ -53,6 +53,52 @@ class Player:
         #
         self.CtrlKeyDown = 1
 
+    def move(self, fDeltaTime):
+        if self.moving == 1:
+            self.movement -= 112 * fDeltaTime* self.CtrlKeyDown
+            if self.movement <= -50 * self.CtrlKeyDown:
+                self.movement = 0
+                self.x -= 50 * self.CtrlKeyDown
+                self.moving = 0
+                self.rotatedir -= 1 * self.CtrlKeyDown
+                player.CtrlKeyDown = 1
+                if self.rotatedir <= -4:
+                    self.rotatedir += 4
+            pass
+        elif self.moving == 2:
+            self.movement += 112 * fDeltaTime * self.CtrlKeyDown
+            if self.movement >= 50 * self.CtrlKeyDown:
+                self.movement = 0
+                self.x += 50 * self.CtrlKeyDown
+                self.moving = 0
+                self.rotatedir += 1 * self.CtrlKeyDown
+                player.CtrlKeyDown = 1
+                if self.rotatedir >= 4:
+                    self.rotatedir -= 4
+            pass
+        elif self.moving == 3:
+            self.movementy += 112 * fDeltaTime * self.CtrlKeyDown
+            if self.movementy >= 50 * self.CtrlKeyDown:
+                self.movementy = 0
+                self.y += 50 * self.CtrlKeyDown
+                self.moving = 0
+                self.rotatedir -= 2 * self.CtrlKeyDown
+                player.CtrlKeyDown = 1
+                if self.rotatedir <= -4:
+                    self.rotatedir += 4
+            pass
+        elif self.moving == 4:
+            self.movementy -= 112 * fDeltaTime * self.CtrlKeyDown
+            if self.movementy <= -50 * self.CtrlKeyDown:
+                self.movementy = 0
+                self.y -= 50 * self.CtrlKeyDown
+                self.moving = 0
+                self.rotatedir += 2 * self.CtrlKeyDown
+                player.CtrlKeyDown = 1
+                if self.rotatedir >= 4:
+                    self.rotatedir -= 4
+            pass
+
     def update(self,fDeltaTime):
         if self.dir == 0:
             self.jumpHeight += 1970 / ((self.jumpHeight+100)/50) * fDeltaTime
@@ -65,46 +111,7 @@ class Player:
                 self.dir = 0
                 self.jumpHeight = 0
 
-        if self.moving == 1:
-            self.movement -= 112 * fDeltaTime
-            if self.movement <= -50:
-                self.movement = 0
-                self.x -= 50
-                self.moving = 0
-                self.rotatedir -= 1
-                if self.rotatedir == -4:
-                    self.rotatedir = 0
-            pass
-        elif self.moving == 2:
-            self.movement += 112 * fDeltaTime
-            if self.movement >= 50:
-                self.movement = 0
-                self.x += 50
-                self.moving = 0
-                self.rotatedir += 1
-                if self.rotatedir == 4:
-                    self.rotatedir = 0
-            pass
-        elif self.moving == 3:
-            self.movementy += 112 * fDeltaTime
-            if self.movementy >= 50:
-                self.movementy = 0
-                self.y += 50
-                self.moving = 0
-                self.rotatedir -= 2
-                if self.rotatedir <= -4:
-                    self.rotatedir += 4
-            pass
-        elif self.moving == 4:
-            self.movementy -= 112 * fDeltaTime
-            if self.movementy <= -50:
-                self.movementy = 0
-                self.y -= 50
-                self.moving = 0
-                self.rotatedir += 2
-                if self.rotatedir >= 4:
-                    self.rotatedir -= 4
-            pass
+        player.move(fDeltaTime)
         pass
 
     def draw(self):
@@ -115,19 +122,19 @@ class Player:
         self.y += y
 
     def pressKey(self, direction):
-            if direction == 1:
-                self.moving = 1
-                pass
-            elif direction == 2:
-                self.moving = 2
-                pass
-            elif direction == 3:
-                self.moving = 3
-                pass
-            elif direction == 4:
-                self.moving = 4
-                pass
+        if direction == 1:
+            self.moving = 1
             pass
+        elif direction == 2:
+            self.moving = 2
+            pass
+        elif direction == 3:
+            self.moving = 3
+            pass
+        elif direction == 4:
+            self.moving = 4
+            pass
+        pass
 
 
 def enter():
@@ -169,10 +176,11 @@ def handle_events(fDeltaTime):
             game_framework.change_state(title_state)
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
             game_framework.push_state(pause_state)
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LCTRL):
-            player.CtrlKeyDown = 3
-        elif (event.type, event.key) == (SDL_KEYUP, SDLK_LCTRL):
-            player.CtrlKeyDown = 1
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LCTRL) and player.moving == 0:
+                if player.CtrlKeyDown == 3:
+                    player.CtrlKeyDown = 1
+                else:
+                    player.CtrlKeyDown = 3
         elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT and player.jumpHeight < 60:
             player.pressKey(1)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT and player.jumpHeight < 60:
