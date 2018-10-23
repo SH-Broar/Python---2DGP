@@ -9,7 +9,6 @@ import title_state
 import pause_state
 
 
-
 name = "MainState"
 
 player = None
@@ -31,6 +30,32 @@ class Grass:
     def draw(self):
         self.image.draw(400, 30)
 
+
+def enter():
+    global player, grass, BGM
+    player = Player()
+    grass = Grass()
+    if BGM is None:
+        BGM = Stage1_Bgm()
+    else:
+        BGM.bgm.repeat_play()
+
+
+def exit():
+    global player, grass, BGM
+    del(player)
+    del(grass)
+    BGM = None
+
+
+def pause():
+
+    pass
+
+
+
+def resume():
+    pass
 
 class Player:
     def __init__(self):
@@ -135,36 +160,6 @@ class Player:
             self.moving = 4
             pass
         pass
-
-
-def enter():
-    global player, grass, BGM
-    if (player == None):
-        player = Player()
-        grass = Grass()
-    if BGM is None:
-        BGM = Stage1_Bgm()
-    else:
-        BGM.bgm.repeat_play()
-
-
-def exit():
-    global player, grass, BGM
-    del(player)
-    del(grass)
-    BGM = None
-
-
-def pause():
-
-    pass
-
-
-
-def resume():
-    pass
-
-
 
 def handle_events(fDeltaTime):
     global player
