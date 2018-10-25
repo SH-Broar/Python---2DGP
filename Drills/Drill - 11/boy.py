@@ -161,7 +161,7 @@ next_state_table = {
     SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, LEFT_UP: RunState, RIGHT_UP: RunState, SPACE: IdleState
                  ,DASH: IdleState, DASH_END: IdleState},
     DashState: {LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, LEFT_UP: IdleState, RIGHT_UP: IdleState,
-                DASH: DashState, DASH_END: RunState, SLEEP_TIMER: RunState}
+                DASH: DashState, DASH_END: RunState, SLEEP_TIMER: RunState, SPACE: RunState}
 }
 
 class Boy:
@@ -181,7 +181,6 @@ class Boy:
         ball = Ball(self.x,self.y,self.dir*3)
         game_world.add_object(ball,1)
         pass
-
 
     def add_event(self, event):
         self.event_que.insert(0, event)
