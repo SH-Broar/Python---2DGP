@@ -96,12 +96,13 @@ class DashState:
     @staticmethod
     def enter(boy, event):
         if event == DASH:
-            boy.velocity *= 3
+            boy.velocity *= 2
         boy.dir = boy.velocity
+        boy.dTimer = 100
 
     @staticmethod
     def exit(boy, event):
-        boy.velocity /= 3
+        boy.velocity /= 2
         if event == SPACE:
             boy.fire_ball()
         pass
@@ -110,12 +111,15 @@ class DashState:
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
         boy.timer -= 1
+        boy.dTimer -= 1
         boy.x += boy.velocity
         boy.x = clamp(25, boy.x, 1600 - 25)
+        if boy.dTimer == 0:
+            boy.add_event(SLEEP_TIMER)
 
     @staticmethod
     def draw(boy):
-        if boy.dir == 3:
+        if boy.dir == 2:
             boy.image.clip_draw(boy.frame * 100, 100, 100, 100, boy.x, boy.y)
         else:
             boy.image.clip_draw(boy.frame * 100, 0, 100, 100, boy.x, boy.y)
@@ -157,7 +161,7 @@ next_state_table = {
     SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, LEFT_UP: RunState, RIGHT_UP: RunState, SPACE: IdleState
                  ,DASH: IdleState, DASH_END: IdleState},
     DashState: {LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, LEFT_UP: IdleState, RIGHT_UP: IdleState,
-                DASH: DashState, DASH_END: RunState}
+                DASH: DashState, DASH_END: RunState, SLEEP_TIMER: RunState}
 }
 
 class Boy:
