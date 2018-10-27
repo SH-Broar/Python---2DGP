@@ -198,5 +198,4 @@ def draw(fDeltaTime):
 
 
 
-
-
+#I have to Refactoring my code but It's Hell's Door! # Help me!
