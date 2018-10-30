@@ -59,11 +59,13 @@ class IdleState:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        boy.gx, boy.gy = boy.x,boy.y
         if get_time() - boy.prevTime >= 3:
             boy.add_event(SLEEP_TIMER)
 
     @staticmethod
     def draw(boy):
+        boy.image.opacify(1)
         if boy.dir == 1:
             boy.image.clip_draw(int(boy.frame) * 100, 300, 100, 100, boy.x, boy.y)
         else:
@@ -93,12 +95,14 @@ class RunState:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        boy.gx, boy.gy = boy.x, boy.y
         boy.x += boy.velocity * game_framework.frame_time
         boy.x = clamp(25, boy.x, 1600 - 25)
         boy.prevTime = get_time()
 
     @staticmethod
     def draw(boy):
+        boy.image.opacify(1)
         if boy.dir == 1:
             boy.image.clip_draw(int(boy.frame) * 100, 100, 100, 100, boy.x, boy.y)
         else:
@@ -130,7 +134,10 @@ class SleepState:
             boy.image.opacify(1)
             boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592 / 2, '', boy.gx - 25, boy.gy - 25, 100, 100)
             boy.image.opacify(0.3)
-            boy.image.clip_draw(100, 400-(int)(100*(get_time() - boy.prevTime)), 100, (int)(100*(get_time() - boy.prevTime)), (int)(boy.x - 80 + 80*(get_time() - boy.prevTime)),  (int)(boy.y + 10 + 10*(get_time() - boy.prevTime)))
+            boy.image.clip_draw(100, 400-(int)(100*(get_time() - boy.prevTime)),
+                                100, (int)(100*(get_time() - boy.prevTime)),
+                                (int)(boy.x - 80 + 80*(get_time() - boy.prevTime)),
+                                (int)(boy.y + 10 + 10*(get_time() - boy.prevTime)))
         else:
             boy.image.opacify(1)
             boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592 / 2, '', boy.gx + 25, boy.gy - 25, 100, 100)
@@ -152,6 +159,9 @@ class GhostState:
 
     @staticmethod
     def do(boy):
+        boy.angle += 720*game_framework.frame_time
+        boy.x = -300*math.sin(boy.angle * 3.14 /180)
+        boy.y = 300*math.cos((boy.angle+180) * 3.14/ 180)
         pass
 
     @staticmethod
@@ -161,12 +171,13 @@ class GhostState:
             boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592 / 2, '', boy.gx - 25,
                                           boy.gy - 25, 100, 100)
             boy.image.opacify(random.randint(0,100)/100)
-            
+            boy.image.clip_draw(int(boy.frame) * 100, 300, 100, 100, boy.gx + boy.x, boy.gy + boy.y + 300)
 
         else:
             boy.image.opacify(1)
             boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592 / 2, '', boy.gx + 25,boy.gy - 25, 100, 100)
             boy.image.opacify(random.randint(0, 100) / 100)
+            boy.image.clip_draw(int(boy.frame) * 100, 200, 100, 100, boy.gx + boy.x, boy.gy + boy.y + 300)
 
 next_state_table = {
     IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SLEEP_TIMER: SleepState, SPACE: IdleState},
@@ -188,6 +199,7 @@ class Boy:
         self.velocity = 0
         self.frame = 0
         self.prevTime = 0
+        self.angle = 0
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
@@ -209,7 +221,7 @@ class Boy:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(self.x - 60, self.y + 50, '(Time: %3.2f)' % get_time(), (255, 255, 0))
+        self.font.draw(self.gx - 60, self.gy + 50, '(Time: %3.2f)' % get_time(), (255, 255, 0))
         # fill here
 
     def handle_event(self, event):
