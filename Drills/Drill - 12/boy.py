@@ -60,7 +60,7 @@ class IdleState:
     def do(boy):
         boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
         boy.gx, boy.gy = boy.x,boy.y
-        if get_time() - boy.prevTime >= 3:
+        if get_time() - boy.prevTime >= 10:
             boy.add_event(SLEEP_TIMER)
 
     @staticmethod
@@ -162,20 +162,21 @@ class GhostState:
         boy.angle += 720*game_framework.frame_time
         boy.x = -300*math.sin(boy.angle * 3.14 /180)
         boy.y = 300*math.cos((boy.angle+180) * 3.14/ 180)
+        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
         pass
 
     @staticmethod
     def draw(boy):
         if boy.dir == 1:
             boy.image.opacify(1)
-            boy.image.clip_composite_draw(int(boy.frame) * 100, 300, 100, 100, 3.141592 / 2, '', boy.gx - 25,
+            boy.image.clip_composite_draw(0, 300, 100, 100, 3.141592 / 2, '', boy.gx - 25,
                                           boy.gy - 25, 100, 100)
             boy.image.opacify(random.randint(0,100)/100)
             boy.image.clip_draw(int(boy.frame) * 100, 300, 100, 100, boy.gx + boy.x, boy.gy + boy.y + 300)
 
         else:
             boy.image.opacify(1)
-            boy.image.clip_composite_draw(int(boy.frame) * 100, 200, 100, 100, -3.141592 / 2, '', boy.gx + 25,boy.gy - 25, 100, 100)
+            boy.image.clip_composite_draw(0, 200, 100, 100, -3.141592 / 2, '', boy.gx + 25,boy.gy - 25, 100, 100)
             boy.image.opacify(random.randint(0, 100) / 100)
             boy.image.clip_draw(int(boy.frame) * 100, 200, 100, 100, boy.gx + boy.x, boy.gy + boy.y + 300)
 
