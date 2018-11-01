@@ -195,7 +195,3 @@ def draw(fDeltaTime):
     grass.draw()
     player.draw()
     update_canvas()
-
-
-
-#I have to Refactoring my code but It's Hell's Door! # Help me!
