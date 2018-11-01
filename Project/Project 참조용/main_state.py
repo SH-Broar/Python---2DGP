@@ -14,16 +14,30 @@ name = "MainState"
 
 boy = None
 
+BGM = None
+
+class Stage1_Bgm:
+    def __init__(self):
+        self.bgm = load_music('1City.mp3')
+        self.bgm.set_volume(64)
+        self.bgm.repeat_play()
+
 def enter():
-    global boy
+    global boy, BGM
     boy = Boy()
     grass = Grass()
     game_world.add_object(grass, 0)
     game_world.add_object(boy, 1)
+    if BGM is None:
+        BGM = Stage1_Bgm()
+    else:
+        BGM.bgm.repeat_play()
 
 
 def exit():
+    global BGM
     game_world.clear()
+    BGM = None
 
 def pause():
     pass
