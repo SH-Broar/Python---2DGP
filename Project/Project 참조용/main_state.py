@@ -24,6 +24,7 @@ class Stage1_Bgm:
 
 def enter():
     global boy, BGM
+    #파일에서 데이터 받아와서 미리 저장하기
     boy = Boy()
     grass = Grass()
     game_world.add_object(grass, 0)

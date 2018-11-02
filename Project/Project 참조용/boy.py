@@ -124,7 +124,7 @@ class RunState:
     @staticmethod
     def draw(boy):
         boy.image.opacify(1)
-        boy.image.rotate_draw(boy.angle* 3.14 / 180, boy.x, boy.y + boy.jumpHeight, 50, 50)
+        boy.image.rotate_draw(boy.angle * 3.14 / 180, boy.x, boy.y + boy.jumpHeight, 50, 50)
 
 
 next_state_table = {
