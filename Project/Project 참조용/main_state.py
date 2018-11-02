@@ -16,6 +16,7 @@ boy = None
 BGM = None
 TimeCut = []
 Mapper = []
+order = 0
 
 class Stage1_Bgm:
     def __init__(self):
@@ -49,15 +50,25 @@ def mapper():
         if line % 13 == 0:
             for i in range(13):
                 if i % 13 == 0:
-                    TimeCut.append(A[i])
+                    TimeCut.append(A[line])
                 else:
                     for b in A[i]:
                         x = int(b)
                         Mapper.append(x)
 
+    TimeCut.append(999)
+
 
 def MakeMap():
-    
+    global TimeCut, Mapper, order
+    if get_time() < int(TimeCut[order]):
+        print(order)
+        pass
+    else:
+        order += 1
+
+    #block class make and mapping in here
+    #by using order in Mapper, can print block in time.
 
 
 def exit():
