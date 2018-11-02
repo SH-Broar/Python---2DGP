@@ -74,20 +74,28 @@ class RunState:
     @staticmethod
     def enter(boy, event):
         if event == RIGHT_DOWN:
+            boy.dir = 1
+            boy.bangle = 0
             boy.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
+            boy.dir = -1
+            boy.bangle = 0
             boy.velocity -= RUN_SPEED_PPS
         elif event == RIGHT_UP:
             boy.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
             boy.velocity += RUN_SPEED_PPS
-        boy.dir = clamp(-1, boy.velocity, 1)
         pass
 
     @staticmethod
     def exit(boy, event):
         if event == SPACE:
             boy.fire_ball()
+        if event == TimeUp:
+            if boy.dir == 1:
+                boy.angle = boy.angle - (boy.angle % 90) + 90
+            else:
+                boy.angle = boy.angle - (boy.angle % 90)
 
     @staticmethod
     def do(boy):
@@ -98,7 +106,10 @@ class RunState:
         #boy.prevTime = get_time()
         boy.frame = (boy.frame + (180 * (boy.MusicBpm / 60) * game_framework.frame_time)) % 180
         boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
+        boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
+        if boy.bangle >= 90 and boy.bangle <= 270:
+            boy.add_event(TimeUp)
 
     @staticmethod
     def draw(boy):
@@ -126,6 +137,7 @@ class Boy:
         self.keyDown = False
         self.frame = 0      #점프용
         self.jumpHeight = 0
+        self.bangle = 0
         self.angle = 0
         #
         self.prevTime = 0
