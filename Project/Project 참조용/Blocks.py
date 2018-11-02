@@ -24,3 +24,6 @@ class Blocks:
 
     def update(self):
         pass
+
+    def deadCall(self):
+        game_world.remove_object(self)

@@ -48,7 +48,7 @@ def mapper():
     input.close()
     for line in range(LineOfFile):
         if line % 13 == 0:
-            TimeCut.append(A[line])
+            TimeCut.append(float(A[line]))
         else:
             for b in A[line]:
                 x = int(b)
@@ -60,16 +60,16 @@ def mapper():
 def MakeMap():
     global TimeCut, Mapper, order
     xl = 0
-    if get_time() < int(TimeCut[order]):
+    if get_time() < TimeCut[order]:
         pass
     else:
         order += 1
         # block class make and mapping in here
         # by using order in Mapper, can print block in time.
-        game_world.remove_object_by_line(3)
+        game_world.remove_object_by_line(2)
         for yLine in range(0, 12):
             for xLine in range(0, 20):
-                tile = Blocks(xLine * 50 + 25, yLine * 50 + 25, Mapper[(order-1)*240 + xl])
+                tile = Blocks(xLine * 50 + 25, 600 - (yLine+1) * 50 + 25, Mapper[(order-1)*240 + xl])
                 game_world.add_object(tile, 2)
                 xl += 1
 

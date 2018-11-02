@@ -115,7 +115,8 @@ class RunState:
         if boy.bangle < 90 or boy. bangle > 270:
             boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
         boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
-        boy.x = boy.x + boy.dir * game_framework.frame_time * 50 * boy.CtrlDown
+
+        boy.x = boy.x + boy.dir * game_framework.frame_time * 80 * boy.CtrlDown
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
 
         if boy.bangle > 90 and boy.bangle < 270:
