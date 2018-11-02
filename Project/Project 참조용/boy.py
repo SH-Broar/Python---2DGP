@@ -64,7 +64,7 @@ class IdleState:
     @staticmethod
     def draw(boy):
         boy.image.opacify(1)
-        boy.image.draw(boy.x, boy.y, 100, 100)
+        boy.image.draw(boy.x, boy.y, 50, 50)
 
 
 class RunState:
@@ -94,13 +94,13 @@ class RunState:
         boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
         boy.gx, boy.gy = boy.x, boy.y
         boy.x += boy.velocity * game_framework.frame_time
-        boy.x = clamp(25, boy.x, 1600 - 25)
+        boy.x = clamp(25, boy.x, 1000 - 25)
         boy.prevTime = get_time()
 
     @staticmethod
     def draw(boy):
         boy.image.opacify(1)
-        boy.image.draw(boy.x, boy.y, 100, 100)
+        boy.image.draw(boy.x, boy.y, 50, 50)
 
 
 next_state_table = {
