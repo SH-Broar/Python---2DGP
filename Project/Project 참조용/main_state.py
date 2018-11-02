@@ -13,8 +13,9 @@ from grass import Grass
 name = "MainState"
 
 boy = None
-
 BGM = None
+TimeCut = []
+Mapper = []
 
 class Stage1_Bgm:
     def __init__(self):
@@ -29,10 +30,34 @@ def enter():
     grass = Grass()
     game_world.add_object(grass, 0)
     game_world.add_object(boy, 1)
+    mapper()
     if BGM is None:
         BGM = Stage1_Bgm()
     else:
         BGM.bgm.repeat_play()
+
+def mapper():
+    global TimeCut, Mapper
+    input = open("tile\\map.txt", "rt")
+    A = []
+    LineOfFile = 0
+    for line in input:
+        A.append(line.strip())
+        LineOfFile += 1
+    input.close()
+    for line in range(LineOfFile):
+        if line % 13 == 0:
+            for i in range(13):
+                if i % 13 == 0:
+                    TimeCut.append(A[i])
+                else:
+                    for b in A[i]:
+                        x = int(b)
+                        Mapper.append(x)
+
+
+def MakeMap():
+    
 
 
 def exit():
@@ -60,10 +85,12 @@ def handle_events():
 
 
 def update():
+    MakeMap()
     for game_object in game_world.all_objects():
         game_object.update()
     delay(0.01)
     # fill here
+
 
 
 def draw():
