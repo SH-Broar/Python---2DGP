@@ -59,7 +59,7 @@ class IdleState:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame+(180*(boy.MusicBpm/60)*game_framework.frame_time)) % 180
-        boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 50
+        boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
 
 
     @staticmethod
@@ -81,8 +81,6 @@ class RunState:
         elif event == LEFT_UP:
             boy.velocity += RUN_SPEED_PPS
         boy.dir = clamp(-1, boy.velocity, 1)
-        boy.x = boy.gx
-        boy.y = boy.gy
         pass
 
     @staticmethod
@@ -92,16 +90,18 @@ class RunState:
 
     @staticmethod
     def do(boy):
-        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-        boy.gx, boy.gy = boy.x, boy.y
-        boy.x += boy.velocity * game_framework.frame_time
-        boy.x = clamp(25, boy.x, 1000 - 25)
-        boy.prevTime = get_time()
+        #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        #boy.gx, boy.gy = boy.x, boy.y
+        #boy.x += boy.velocity * game_framework.frame_time
+        #boy.x = clamp(25, boy.x, 1000 - 25)
+        #boy.prevTime = get_time()
+        boy.frame = (boy.frame + (180 * (boy.MusicBpm / 60) * game_framework.frame_time)) % 180
+        boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
 
     @staticmethod
     def draw(boy):
         boy.image.opacify(1)
-        boy.image.draw(boy.x, boy.y, 50, 50)
+        boy.image.draw(boy.x, boy.y + boy.jumpHeight, 50, 50)
 
 
 next_state_table = {
@@ -119,7 +119,7 @@ class Boy:
         self.dir = 1
         self.velocity = 0
         #
-        self.MusicBpm = 120
+        self.MusicBpm = 100
         #
         self.frame = 0      #점프용
         self.jumpHeight = 0
@@ -131,7 +131,7 @@ class Boy:
         self.cur_state.enter(self, None)
 
     def fire_ball(self):
-        ball = Ball(self.x, self.y, self.dir*3)
+        ball = Ball(self.x, self.y + self.jumpHeight, self.dir*3)
         game_world.add_object(ball, 1)
 
     def add_event(self, event):
@@ -147,8 +147,6 @@ class Boy:
 
     def draw(self):
         self.cur_state.draw(self)
-        #self.font.draw(self.gx - 60, self.gy + 50, '(Time: %3.2f)' % get_time(), (255, 255, 0))
-        # fill here
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
