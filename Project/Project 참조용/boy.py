@@ -64,6 +64,7 @@ class IdleState:
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
 
 
+
     @staticmethod
     def draw(boy):
         boy.image.rotate_draw(boy.angle* 3.14 / 180,boy.x, boy.y + boy.jumpHeight, 50, 50)
@@ -83,26 +84,37 @@ class RunState:
                 boy.bangle = 0
                 boy.velocity -= RUN_SPEED_PPS
             elif event == RIGHT_UP:
+                boy.keyDown = False
                 boy.velocity -= RUN_SPEED_PPS
             elif event == LEFT_UP:
+                boy.keyDown = False
                 boy.velocity += RUN_SPEED_PPS
+        else:
+            boy.add_event(TimeUp)
 
     @staticmethod
     def exit(boy, event):
         if event == SPACE:
             boy.fire_ball()
+        if event == LEFT_DOWN or RIGHT_DOWN:
+            boy.angle = boy.angle - 45
+            boy.angle = boy.angle - (boy.angle % 90) + 90
+            boy.dir = 0
+            boy.bangle = 0
         if event == TimeUp:
             boy.angle = boy.angle - 45
             boy.angle = boy.angle - (boy.angle % 90) + 90
             boy.dir = 0
+            boy.bangle = 0
 
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + (180 * (boy.MusicBpm / 60) * game_framework.frame_time)) % 180
         boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
         boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
+        boy.x = boy.x + boy.dir * game_framework.frame_time * 50
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
-        if boy.bangle >= 90 and boy.bangle <= 270:
+        if boy.bangle >= 90 and boy.dir == 1 or boy.bangle <= 270 and boy.dir == -1:
             boy.add_event(TimeUp)
 
     @staticmethod
@@ -129,6 +141,7 @@ class Boy:
         self.MusicBpm = 100
         #
         self.keyDown = False
+        self.CtrlDown = 0
         self.frame = 0      #점프용
         self.jumpHeight = 0
         self.bangle = 0
@@ -158,7 +171,7 @@ class Boy:
         self.cur_state.draw(self)
 
     def handle_event(self, event):
-        if (event.type, event.key) in key_event_table and self.keyDown == False:
+        if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
 
