@@ -58,13 +58,14 @@ class IdleState:
 
     @staticmethod
     def do(boy):
-        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-        boy.gx, boy.gy = boy.x,boy.y
+        boy.frame = (boy.frame+(180*(boy.MusicBpm/60)*game_framework.frame_time)) % 180
+        boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 50
+
 
     @staticmethod
     def draw(boy):
         boy.image.opacify(1)
-        boy.image.draw(boy.x, boy.y, 50, 50)
+        boy.image.draw(boy.x, boy.y + boy.jumpHeight, 50, 50)
 
 
 class RunState:
@@ -117,7 +118,12 @@ class Boy:
         self.font = load_font('ENCR10B.TTF',16)
         self.dir = 1
         self.velocity = 0
-        self.frame = 0
+        #
+        self.MusicBpm = 120
+        #
+        self.frame = 0      #점프용
+        self.jumpHeight = 0
+        #
         self.prevTime = 0
         self.angle = 0
         self.event_que = []
@@ -141,7 +147,7 @@ class Boy:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(self.gx - 60, self.gy + 50, '(Time: %3.2f)' % get_time(), (255, 255, 0))
+        #self.font.draw(self.gx - 60, self.gy + 50, '(Time: %3.2f)' % get_time(), (255, 255, 0))
         # fill here
 
     def handle_event(self, event):
