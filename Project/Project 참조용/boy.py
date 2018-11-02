@@ -41,7 +41,6 @@ class IdleState:
 
     @staticmethod
     def enter(boy, event):
-        boy.keyDown = False
         if event == RIGHT_DOWN:
             boy.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
@@ -74,23 +73,22 @@ class RunState:
 
     @staticmethod
     def enter(boy, event):
-        if boy.jumpHeight <= 30:
-            if event == RIGHT_DOWN:
+        if event == RIGHT_DOWN:
+            if boy.jumpHeight <= 30:
                 boy.dir = 1
                 boy.bangle = 0
                 boy.velocity += RUN_SPEED_PPS
-            elif event == LEFT_DOWN:
+        elif event == LEFT_DOWN:
+            if boy.jumpHeight <= 30:
                 boy.dir = -1
                 boy.bangle = 0
                 boy.velocity -= RUN_SPEED_PPS
-            elif event == RIGHT_UP:
-                boy.keyDown = False
-                boy.velocity -= RUN_SPEED_PPS
-            elif event == LEFT_UP:
-                boy.keyDown = False
-                boy.velocity += RUN_SPEED_PPS
-        else:
-            boy.add_event(TimeUp)
+        elif event == RIGHT_UP:
+            boy.velocity -= RUN_SPEED_PPS
+        elif event == LEFT_UP:
+            boy.velocity += RUN_SPEED_PPS
+
+
 
     @staticmethod
     def exit(boy, event):
@@ -110,11 +108,13 @@ class RunState:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + (180 * (boy.MusicBpm / 60) * game_framework.frame_time)) % 180
-        boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
+        if boy.bangle < 90 or boy. bangle > 270:
+            boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
         boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
         boy.x = boy.x + boy.dir * game_framework.frame_time * 50
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
-        if boy.bangle >= 90 and boy.dir == 1 or boy.bangle <= 270 and boy.dir == -1:
+
+        if boy.bangle >= 110 and boy.bangle <= 250:
             boy.add_event(TimeUp)
 
     @staticmethod
