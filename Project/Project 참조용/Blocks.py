@@ -5,12 +5,12 @@ class Blocks:
     b1 = None
     b2 = None
     b3 = None
-    def __init__(self, x = 400, y = 300, style = 1):
-        if Blocks.b1 == None:
+    def __init__(self, x = 400, y = 300, style = 0):
+        if Blocks.b1 == None and style == 1:
             Blocks.b1 = load_image('tile\\1.png')
-        if Blocks.b2 == None:
+        if Blocks.b2 == None and style == 2:
             Blocks.b2 = load_image('tile\\2.png')
-        if Blocks.b3 == None:
+        if Blocks.b3 == None and style == 3:
             Blocks.b3 = load_image('tile\\3.png')
         self.x, self.y, self.style = x, y, style
 

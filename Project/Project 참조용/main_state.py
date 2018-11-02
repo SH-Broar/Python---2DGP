@@ -48,36 +48,33 @@ def mapper():
     input.close()
     for line in range(LineOfFile):
         if line % 13 == 0:
-            for i in range(13):
-                if i % 13 == 0:
-                    TimeCut.append(A[line])
-                else:
-                    for b in A[i]:
-                        x = int(b)
-                        Mapper.append(x)
+            TimeCut.append(A[line])
+        else:
+            for b in A[line]:
+                x = int(b)
+                Mapper.append(x)
 
     TimeCut.append(999) # type Music Length
 
 
 def MakeMap():
     global TimeCut, Mapper, order
-    yl = 0
     xl = 0
     if get_time() < int(TimeCut[order]):
-        print(order)
         pass
     else:
         order += 1
+        # block class make and mapping in here
+        # by using order in Mapper, can print block in time.
 
-    #block class make and mapping in here
-    #by using order in Mapper, can print block in time.
+        for yLine in range(0, 12):
+            for xLine in range(0, 20):
+                print((order-1)*120 + (yl * 12) + xl)
+                tile = Blocks(xLine * 50 + 25, yLine * 50 + 25, Mapper[(order-1)*240 + xl])
+                game_world.add_object(tile, 0)
+                xl += 1
 
-    for yLine in range(1,12):
-        for xLine in range(1,20):
-            tile = Blocks(xLine*50 + 25,yLine*50 + 25,Mapper[order*yl + xl])
-            game_world.add_object(tile, 0)
-            xl += 1
-    yl += 1
+
 
 
 def exit():
