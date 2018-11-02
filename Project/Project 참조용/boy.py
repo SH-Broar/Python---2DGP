@@ -23,7 +23,8 @@ FRAMES_PER_ACTION = 8
 
 
 # Boy Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SPACE = range(5)
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SPACE, TimeUp = range(6)
+
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
@@ -40,6 +41,7 @@ class IdleState:
 
     @staticmethod
     def enter(boy, event):
+        boy.keyDown = False
         if event == RIGHT_DOWN:
             boy.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
@@ -64,8 +66,7 @@ class IdleState:
 
     @staticmethod
     def draw(boy):
-        boy.image.opacify(1)
-        boy.image.draw(boy.x, boy.y + boy.jumpHeight, 50, 50)
+        boy.image.rotate_draw(boy.angle* 3.14 / 180,boy.x, boy.y + boy.jumpHeight, 50, 50)
 
 
 class RunState:
@@ -96,17 +97,18 @@ class RunState:
         #boy.x = clamp(25, boy.x, 1000 - 25)
         #boy.prevTime = get_time()
         boy.frame = (boy.frame + (180 * (boy.MusicBpm / 60) * game_framework.frame_time)) % 180
+        boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
 
     @staticmethod
     def draw(boy):
         boy.image.opacify(1)
-        boy.image.draw(boy.x, boy.y + boy.jumpHeight, 50, 50)
+        boy.image.rotate_draw(boy.angle* 3.14 / 180, boy.x, boy.y + boy.jumpHeight, 50, 50)
 
 
 next_state_table = {
-    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, SPACE: RunState},
+    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState, TimeUp: IdleState},
+    RunState: {RIGHT_UP: RunState, LEFT_UP: RunState, LEFT_DOWN: RunState, RIGHT_DOWN: RunState, SPACE: RunState, TimeUp: IdleState},
 }
 
 class Boy:
@@ -121,11 +123,12 @@ class Boy:
         #
         self.MusicBpm = 100
         #
+        self.keyDown = False
         self.frame = 0      #점프용
         self.jumpHeight = 0
+        self.angle = 0
         #
         self.prevTime = 0
-        self.angle = 0
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
@@ -149,7 +152,7 @@ class Boy:
         self.cur_state.draw(self)
 
     def handle_event(self, event):
-        if (event.type, event.key) in key_event_table:
+        if (event.type, event.key) in key_event_table and self.keyDown == False:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
 
