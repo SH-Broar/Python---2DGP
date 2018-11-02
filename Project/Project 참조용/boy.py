@@ -78,20 +78,24 @@ class RunState:
     @staticmethod
     def enter(boy, event):
         if event == RIGHT_DOWN:
+            boy.keyF = True
             if boy.jumpHeight <= 30:
                 boy.dir = 1
                 boy.bangle = 0
                 boy.exX = boy.x
                 boy.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
+
             if boy.jumpHeight <= 30:
                 boy.dir = -1
                 boy.bangle = 0
                 boy.exX = boy.x
                 boy.velocity -= RUN_SPEED_PPS
         elif event == RIGHT_UP:
+            boy.keyF = False
             boy.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
+            boy.keyF = False
             boy.velocity += RUN_SPEED_PPS
 
 
@@ -120,10 +124,9 @@ class RunState:
             boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
         boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
 
-
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
 
-        if boy.bangle > 90 and boy.bangle < 270:
+        if boy.bangle > 90 and boy.bangle < 270 and boy.keyF == False:
             boy.add_event(TimeUp)
         if boy.dir == 1:
             boy.x = boy.exX + boy.bangle / 90 * 50
@@ -156,6 +159,7 @@ class Boy:
         self.MusicBpm = 100
         #
         self.keyDown = False
+        self.keyF = False
         self.CtrlDown = 1
         self.frame = 0      #점프용
         self.jumpHeight = 0
