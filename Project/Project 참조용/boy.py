@@ -81,11 +81,13 @@ class RunState:
             if boy.jumpHeight <= 30:
                 boy.dir = 1
                 boy.bangle = 0
+                boy.exX = boy.x
                 boy.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
             if boy.jumpHeight <= 30:
                 boy.dir = -1
                 boy.bangle = 0
+                boy.exX = boy.x
                 boy.velocity -= RUN_SPEED_PPS
         elif event == RIGHT_UP:
             boy.velocity -= RUN_SPEED_PPS
@@ -99,11 +101,13 @@ class RunState:
         if event == SPACE:
             boy.fire_ball()
         if event == LEFT_DOWN or RIGHT_DOWN:
+            boy.exX = boy.x
             boy.angle = boy.angle - 45
             boy.angle = boy.angle - (boy.angle % 90) + 90
             boy.dir = 0
             boy.bangle = 0
         if event == TimeUp:
+            boy.exX = boy.x
             boy.angle = boy.angle - 45
             boy.angle = boy.angle - (boy.angle % 90) + 90
             boy.dir = 0
@@ -116,11 +120,16 @@ class RunState:
             boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
         boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
 
-        boy.x = boy.x + boy.dir * game_framework.frame_time * 80 * boy.CtrlDown
+
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
 
         if boy.bangle > 90 and boy.bangle < 270:
             boy.add_event(TimeUp)
+        if boy.dir == 1:
+            boy.x = boy.exX + boy.bangle / 90 * 50
+        elif boy.dir == -1:
+            boy.x = boy.exX - (360 - boy.bangle) / 90 * 50
+
 
     @staticmethod
     def draw(boy):
@@ -136,7 +145,8 @@ next_state_table = {
 class Boy:
 
     def __init__(self):
-        self.x, self.y = 50, 80
+        self.x, self.y = 50, 50
+        self.exX = 0
         self.image = load_image('Player\\player.png')
         # Boy is only once created, so instance image loading is fine
         self.font = load_font('ENCR10B.TTF',16)
