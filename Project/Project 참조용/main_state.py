@@ -8,7 +8,7 @@ import game_world
 
 from boy import Boy
 from grass import Grass
-
+from Blocks import Blocks
 
 name = "MainState"
 
@@ -56,11 +56,13 @@ def mapper():
                         x = int(b)
                         Mapper.append(x)
 
-    TimeCut.append(999)
+    TimeCut.append(999) # type Music Length
 
 
 def MakeMap():
     global TimeCut, Mapper, order
+    yl = 0
+    xl = 0
     if get_time() < int(TimeCut[order]):
         print(order)
         pass
@@ -69,6 +71,13 @@ def MakeMap():
 
     #block class make and mapping in here
     #by using order in Mapper, can print block in time.
+
+    for yLine in range(1,12):
+        for xLine in range(1,20):
+            tile = Blocks(xLine*50 + 25,yLine*50 + 25,Mapper[order*yl + xl])
+            game_world.add_object(tile, 0)
+            xl += 1
+    yl += 1
 
 
 def exit():
