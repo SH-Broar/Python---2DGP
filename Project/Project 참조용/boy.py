@@ -61,6 +61,10 @@ class IdleState:
     def do(boy):
         boy.frame = (boy.frame+(180*(boy.MusicBpm/60)*game_framework.frame_time)) % 180
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
+        if (boy.keyDown == True):
+            boy.CtrlDown = 3
+        else:
+            boy.CtrlDown = 1
 
 
 
@@ -111,10 +115,10 @@ class RunState:
         if boy.bangle < 90 or boy. bangle > 270:
             boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
         boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
-        boy.x = boy.x + boy.dir * game_framework.frame_time * 50
+        boy.x = boy.x + boy.dir * game_framework.frame_time * 50 * boy.CtrlDown
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
 
-        if boy.bangle >= 110 and boy.bangle <= 250:
+        if boy.bangle > 90 and boy.bangle < 270:
             boy.add_event(TimeUp)
 
     @staticmethod
@@ -124,7 +128,7 @@ class RunState:
 
 
 next_state_table = {
-    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState, TimeUp: IdleState},
+    IdleState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState, TimeUp: IdleState},
     RunState: {RIGHT_UP: RunState, LEFT_UP: RunState, LEFT_DOWN: RunState, RIGHT_DOWN: RunState, SPACE: RunState, TimeUp: IdleState},
 }
 
@@ -135,13 +139,13 @@ class Boy:
         self.image = load_image('Player\\player.png')
         # Boy is only once created, so instance image loading is fine
         self.font = load_font('ENCR10B.TTF',16)
-        self.dir = 1
+        self.dir = 0
         self.velocity = 0
         #
         self.MusicBpm = 100
         #
         self.keyDown = False
-        self.CtrlDown = 0
+        self.CtrlDown = 1
         self.frame = 0      #점프용
         self.jumpHeight = 0
         self.bangle = 0
@@ -174,4 +178,7 @@ class Boy:
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
-
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LCTRL):
+            self.keyDown = True
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_LCTRL):
+            self.keyDown = False
