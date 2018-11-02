@@ -73,37 +73,31 @@ class RunState:
 
     @staticmethod
     def enter(boy, event):
-        if event == RIGHT_DOWN:
-            boy.dir = 1
-            boy.bangle = 0
-            boy.velocity += RUN_SPEED_PPS
-        elif event == LEFT_DOWN:
-            boy.dir = -1
-            boy.bangle = 0
-            boy.velocity -= RUN_SPEED_PPS
-        elif event == RIGHT_UP:
-            boy.velocity -= RUN_SPEED_PPS
-        elif event == LEFT_UP:
-            boy.velocity += RUN_SPEED_PPS
-        pass
+        if boy.jumpHeight <= 30:
+            if event == RIGHT_DOWN:
+                boy.dir = 1
+                boy.bangle = 0
+                boy.velocity += RUN_SPEED_PPS
+            elif event == LEFT_DOWN:
+                boy.dir = -1
+                boy.bangle = 0
+                boy.velocity -= RUN_SPEED_PPS
+            elif event == RIGHT_UP:
+                boy.velocity -= RUN_SPEED_PPS
+            elif event == LEFT_UP:
+                boy.velocity += RUN_SPEED_PPS
 
     @staticmethod
     def exit(boy, event):
         if event == SPACE:
             boy.fire_ball()
         if event == TimeUp:
-            if boy.dir == 1:
-                boy.angle = boy.angle - (boy.angle % 90) + 90
-            else:
-                boy.angle = boy.angle - (boy.angle % 90)
+            boy.angle = boy.angle - 45
+            boy.angle = boy.angle - (boy.angle % 90) + 90
+            boy.dir = 0
 
     @staticmethod
     def do(boy):
-        #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-        #boy.gx, boy.gy = boy.x, boy.y
-        #boy.x += boy.velocity * game_framework.frame_time
-        #boy.x = clamp(25, boy.x, 1000 - 25)
-        #boy.prevTime = get_time()
         boy.frame = (boy.frame + (180 * (boy.MusicBpm / 60) * game_framework.frame_time)) % 180
         boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
         boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
