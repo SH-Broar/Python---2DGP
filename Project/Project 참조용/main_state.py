@@ -66,14 +66,12 @@ def MakeMap():
         order += 1
         # block class make and mapping in here
         # by using order in Mapper, can print block in time.
-
+        game_world.remove_object_by_line(3)
         for yLine in range(0, 12):
             for xLine in range(0, 20):
-                print((order-1)*120 + (yl * 12) + xl)
                 tile = Blocks(xLine * 50 + 25, yLine * 50 + 25, Mapper[(order-1)*240 + xl])
-                game_world.add_object(tile, 0)
+                game_world.add_object(tile, 2)
                 xl += 1
-
 
 
 
