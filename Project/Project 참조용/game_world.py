@@ -1,7 +1,7 @@
 
 # layer 0: Background Objects
-# layer 1: Player
-# layer 2: tiles
+# layer 1: tiles
+# layer 2: Player
 # layer 3: bullets
 objects = [[],[],[],[]]
 

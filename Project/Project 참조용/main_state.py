@@ -30,7 +30,7 @@ def enter():
     boy = Boy()
     grass = Grass()
     game_world.add_object(grass, 0)
-    game_world.add_object(boy, 1)
+    game_world.add_object(boy, 2)
     mapper()
     if BGM is None:
         BGM = Stage1_Bgm()
@@ -66,11 +66,11 @@ def MakeMap():
         order += 1
         # block class make and mapping in here
         # by using order in Mapper, can print block in time.
-        game_world.remove_object_by_line(2)
+        game_world.remove_object_by_line(1)
         for yLine in range(0, 12):
             for xLine in range(0, 20):
                 tile = Blocks(xLine * 50 + 25, 600 - (yLine+1) * 50 + 25, Mapper[(order-1)*240 + xl])
-                game_world.add_object(tile, 2)
+                game_world.add_object(tile, 1)
                 xl += 1
 
 

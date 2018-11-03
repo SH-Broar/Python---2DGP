@@ -7,7 +7,7 @@ class Grass:
         self.image = load_image('Background\\BlueSky.png')
 
     def update(self):
-        self.x += 9 * game_framework.frame_time
+        self.x += 8 * game_framework.frame_time
         pass
 
     def draw(self):

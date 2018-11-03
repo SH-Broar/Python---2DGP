@@ -47,8 +47,6 @@ class IdleState:
 
     @staticmethod
     def exit(boy, event):
-        if event == SPACE:
-            boy.fire_ball()
         pass
 
     @staticmethod
@@ -152,9 +150,9 @@ class RunState:
         elif boy.dir == -1:
             boy.x = boy.exX - (360 - boy.bangle) / 90 * 51 * boy.CtrlDown
         elif boy.dir == 2:
-            boy.y = boy.exY + boy.bangle / 90 * 51 * boy.CtrlDown
+            boy.y = boy.exY + boy.bangle / 90 * 51
         elif boy.dir == -2:
-            boy.y = boy.exY - (360 - boy.bangle) / 90 * 51 * boy.CtrlDown
+            boy.y = boy.exY - (360 - boy.bangle) / 90 * 51
 
 
     @staticmethod
