@@ -1,3 +1,0 @@
-TODO : Opening State
-    Player Move On Platform
-	Particle

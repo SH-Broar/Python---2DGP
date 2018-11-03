@@ -1,7 +1,9 @@
 
 # layer 0: Background Objects
-# layer 1: Foreground Objects
-objects = [[],[]]
+# layer 1: tiles
+# layer 2: Player
+# layer 3: bullets
+objects = [[],[],[],[]]
 
 
 def add_object(o, layer):
@@ -13,6 +15,13 @@ def remove_object(o):
         if o in objects[i]:
             objects[i].remove(o)
             del o
+            return
+
+
+def remove_object_by_line(num):
+    for i in objects[num][::-1]:
+        objects[num].remove(i)
+        del i
 
 
 def clear():
