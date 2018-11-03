@@ -50,7 +50,6 @@ class IdleState:
         elif event == LEFT_UP:
             boy.velocity += RUN_SPEED_PPS
         boy.prevTime = get_time()
-        print("**IN**")
 
     @staticmethod
     def exit(boy, event):
@@ -80,12 +79,20 @@ class RunState:
     def enter(boy, event):
         if event == RIGHT_DOWN:
             if boy.jumpHeight <= 30:
+                if (boy.keyDown == True):
+                    boy.CtrlDown = 3
+                else:
+                    boy.CtrlDown = 1
                 boy.dir = 1
                 boy.bangle = 0
                 boy.exX = boy.x
                 boy.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
             if boy.jumpHeight <= 30:
+                if (boy.keyDown == True):
+                    boy.CtrlDown = 3
+                else:
+                    boy.CtrlDown = 1
                 boy.dir = -1
                 boy.bangle = 0
                 boy.exX = boy.x
@@ -120,15 +127,18 @@ class RunState:
 
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
 
-        if boy.bangle > 90 and boy.bangle < 270:
+        if boy.bangle > 90 and boy.bangle < 270: # end
+        #{
             boy.exX = boy.x
             boy.angle = boy.angle - 45
             boy.angle = boy.angle - (boy.angle % 90) + 90
             boy.dir = 0
             boy.bangle = 0
+
             boy.cur_state = IdleState
             boy.cur_state.enter(boy,TimeUp)
-            #boy.add_event(TimeUp)
+        #}
+
         if boy.dir == 1:
             boy.x = boy.exX + boy.bangle / 90 * 50 * boy.CtrlDown
         elif boy.dir == -1:
