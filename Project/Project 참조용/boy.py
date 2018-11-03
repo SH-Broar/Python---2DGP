@@ -70,6 +70,8 @@ class IdleState:
     @staticmethod
     def draw(boy):
         boy.image.rotate_draw(boy.angle* 3.14 / 180,boy.x, boy.y + boy.jumpHeight, 50, 50)
+        if (boy.keyDown == True):
+            boy.power.rotate_draw(-boy.frame* 3.14 / 360,boy.x, boy.y + boy.jumpHeight, 120, 120)
 
 
 class RunState:
@@ -139,8 +141,9 @@ class RunState:
 
     @staticmethod
     def draw(boy):
-        boy.image.opacify(1)
         boy.image.rotate_draw(boy.angle * 3.14 / 180, boy.x, boy.y + boy.jumpHeight, 50, 50)
+        if (boy.keyDown == True):
+            boy.power.rotate_draw(-boy.frame* 3.14 / 360,boy.x, boy.y + boy.jumpHeight, 120, 120)
 
 
 next_state_table = {
@@ -154,6 +157,7 @@ class Boy:
         self.x, self.y = 25, 60
         self.exX = 0
         self.image = load_image('Player\\player.png')
+        self.power = load_image('Player\\power.png')
         # Boy is only once created, so instance image loading is fine
         self.font = load_font('ENCR10B.TTF',16)
         self.dir = 0
