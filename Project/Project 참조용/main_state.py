@@ -15,7 +15,6 @@ name = "MainState"
 by = None
 BGM = None
 TimeCut = []
-order = 0
 
 class Stage1_Bgm:
     def __init__(self):
@@ -57,18 +56,18 @@ def mapper():
 
 
 def MakeMap():
-    global TimeCut, order
+    global TimeCut
     xl = 0
-    if get_time() < TimeCut[order]:
+    if get_time() < TimeCut[boy.order]:
         pass
     else:
-        order += 1
+        boy.order += 1
         # block class make and mapping in here
         # by using order in Mapper, can print block in real time.
         game_world.remove_object_by_line(1)
         for yLine in range(0, 12):
             for xLine in range(0, 20):
-                tile = Blocks(xLine * 50 + 25, 600 - (yLine+1) * 50 + 25, boy.Mapper[(order-1)*240 + xl])
+                tile = Blocks(xLine * 50 + 25, 600 - (yLine+1) * 50 + 25, boy.Mapper[(boy.order-1)*240 + xl])
                 game_world.add_object(tile, 1)
                 xl += 1
 

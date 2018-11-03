@@ -7,6 +7,7 @@ import random
 import math
 
 Mapper = []
+order = 0
 
 # Boy Run Speed
 # fill expressions correctly
@@ -46,12 +47,14 @@ class IdleState:
 
         if event == Recursion:
             global Mapper
-            boy.playerOnX = int((boy.x + 25) // 50)
+            boy.playerOnX = int((boy.x + 50) // 50)
             boy.playerOnY = int((boy.y + 25) // 50)
-
-            if Mapper[boy.playerOnY*12 + boy.playerOnX] == 0:
-                print("Y")
-            pass
+            print(boy.playerOnX, boy.playerOnY,
+                 Mapper[(order - 1) * 240 + (12 - boy.playerOnY) * 20 + boy.playerOnX - 1])
+            if Mapper[(order-1) * 240 + (12 - boy.playerOnY) * 20 + boy.playerOnX-1] == 0:
+                for i in range(1,boy.playerOnY):
+                    if Mapper[(order-1) * 240 + (12 - i) * 20 + boy.playerOnX-1] != 0:
+                        boy.y = i * 50
 
     @staticmethod
     def exit(boy, event):
@@ -82,8 +85,15 @@ class RunState:
     @staticmethod
     def enter(boy, event):
         if event == Recursion:
+            global Mapper
+            boy.playerOnX = int((boy.x + 50) // 50)
+            boy.playerOnY = int((boy.y + 25) // 50)
+            if Mapper[(order-1) * 240 + (12 - boy.playerOnY) * 20 + boy.playerOnX-1] == 0:
+                for i in range(1,boy.playerOnY):
+                    print((order-1) * 240 + (12 - i) * 20 + boy.playerOnX-1)
+                    if Mapper[(order-1) * 240 + (12 - i) * 20 + boy.playerOnX-1] != 0:
+                        boy.y = i * 50
 
-            pass
         elif event == RIGHT_DOWN:
             if boy.jumpHeight <= 30:
                 if (boy.keyDown == True):
