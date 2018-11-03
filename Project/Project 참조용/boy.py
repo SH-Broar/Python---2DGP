@@ -175,6 +175,8 @@ class Boy:
         self.cur_state.enter(self, None)
 
     def fire_ball(self):
+        ball = Ball(800,200)
+        game_world.add_object(ball,1)
         pass
 
     def add_event(self, event):
