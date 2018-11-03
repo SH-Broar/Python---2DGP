@@ -67,7 +67,6 @@ class IdleState:
             boy.CtrlDown = 1
 
 
-
     @staticmethod
     def draw(boy):
         boy.image.rotate_draw(boy.angle* 3.14 / 180,boy.x, boy.y + boy.jumpHeight, 50, 50)
@@ -163,6 +162,7 @@ class Boy:
         self.MusicBpm = 126
         #
         self.keyDown = False
+        self.teleportDir = 0
         self.CtrlDown = 1
         self.frame = 0      #점프용
         self.jumpHeight = 0
@@ -175,8 +175,7 @@ class Boy:
         self.cur_state.enter(self, None)
 
     def fire_ball(self):
-        ball = Ball(self.x, self.y + self.jumpHeight, self.dir*3)
-        game_world.add_object(ball, 1)
+        pass
 
     def add_event(self, event):
         self.event_que.insert(0, event)
@@ -200,3 +199,15 @@ class Boy:
             self.keyDown = True
         elif (event.type, event.key) == (SDL_KEYUP, SDLK_LCTRL):
             self.keyDown = False
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RCTRL):
+            self.keyDown = True
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_RCTRL):
+            self.keyDown = False
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LSHIFT):
+            self.teleportDir = -1
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RSHIFT):
+            self.teleportDir = 1
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_LSHIFT):
+            self.teleportDir = 0
+        elif (event.type, event.key) == (SDL_KEYUP, SDLK_RSHIFT):
+            self.teleportDir = 0
