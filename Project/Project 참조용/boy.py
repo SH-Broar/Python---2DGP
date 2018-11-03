@@ -49,8 +49,6 @@ class IdleState:
             global Mapper
             boy.playerOnX = int((boy.x + 50) // 50)
             boy.playerOnY = int((boy.y + 25) // 50)
-            print(boy.playerOnX, boy.playerOnY,
-                 Mapper[(order - 1) * 240 + (12 - boy.playerOnY) * 20 + boy.playerOnX - 1])
             if Mapper[(order-1) * 240 + (12 - boy.playerOnY) * 20 + boy.playerOnX-1] == 0:
                 for i in range(1,boy.playerOnY):
                     if Mapper[(order-1) * 240 + (12 - i) * 20 + boy.playerOnX-1] != 0:
@@ -84,15 +82,15 @@ class RunState:
 
     @staticmethod
     def enter(boy, event):
-        if event == Recursion:
-            global Mapper
-            boy.playerOnX = int((boy.x + 50) // 50)
-            boy.playerOnY = int((boy.y + 25) // 50)
-            if Mapper[(order-1) * 240 + (12 - boy.playerOnY) * 20 + boy.playerOnX-1] == 0:
-                for i in range(1,boy.playerOnY):
-                    print((order-1) * 240 + (12 - i) * 20 + boy.playerOnX-1)
-                    if Mapper[(order-1) * 240 + (12 - i) * 20 + boy.playerOnX-1] != 0:
-                        boy.y = i * 50
+        global Mapper
+        boy.playerOnX = int((boy.x + 50) // 50)
+        boy.playerOnY = int((boy.y + 25) // 50)
+        if Mapper[(order-1) * 240 + (12 - boy.playerOnY) * 20 + boy.playerOnX-1] == 0:
+            for i in range(1,boy.playerOnY):
+                if Mapper[(order-1) * 240 + (12 - i) * 20 + boy.playerOnX-1] != 0:
+                    boy.y = i * 50
+                    boy.frame = boy.frame % 180
+                    boy.cur_state.enter(boy, IdleState)
 
         elif event == RIGHT_DOWN:
             if boy.jumpHeight <= 30:
@@ -150,10 +148,10 @@ class RunState:
 
     @staticmethod
     def do(boy):
-        boy.frame = (boy.frame + (180 * (boy.MusicBpm / 60) * game_framework.frame_time)) % 180
+        boy.frame = (boy.frame + (180 * (boy.MusicBpm / 60) * game_framework.frame_time))
         if boy.bangle < 90 or boy. bangle > 270:
-            boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
-            boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
+            boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * (1 if boy.dir == 2 else -1 if boy.dir == -2 else boy.dir)) % 360
+            boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * (1 if boy.dir == 2 else -1 if boy.dir == -2 else boy.dir)) % 360
         if boy.frame >= 180:
             boy.frame = boy.frame % 180
             boy.cur_state.enter(boy, Recursion)
