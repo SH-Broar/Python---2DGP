@@ -88,7 +88,7 @@ class RunState:
                 boy.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
             if boy.jumpHeight <= 30:
-                if (boy.keyDown == True):
+                if boy.keyDown == True:
                     boy.CtrlDown = 3
                 else:
                     boy.CtrlDown = 1
