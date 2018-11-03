@@ -6,6 +6,8 @@ import game_world
 import random
 import math
 
+Mapper = []
+
 # Boy Run Speed
 # fill expressions correctly
 PIXEL_PER_METER = (10.0 / 0.3)
@@ -23,7 +25,7 @@ FRAMES_PER_ACTION = 8
 
 
 # Boy Event
-RIGHT_DOWN, LEFT_DOWN, UP_DOWN, DOWN_DOWN, SPACE, TimeUp = range(6)
+RIGHT_DOWN, LEFT_DOWN, UP_DOWN, DOWN_DOWN, Recursion, TimeUp = range(6)
 
 
 key_event_table = {
@@ -32,8 +34,6 @@ key_event_table = {
 
     (SDL_KEYDOWN, SDLK_UP): UP_DOWN,
     (SDL_KEYDOWN, SDLK_DOWN): DOWN_DOWN,
-
-    (SDL_KEYDOWN, SDLK_SPACE): SPACE
 }
 
 
@@ -43,7 +43,15 @@ class IdleState:
 
     @staticmethod
     def enter(boy, event):
-        boy.prevTime = get_time()
+
+        if event == Recursion:
+            global Mapper
+            boy.playerOnX = int((boy.x + 25) // 50)
+            boy.playerOnY = int((boy.y + 25) // 50)
+
+            if Mapper[boy.playerOnY*12 + boy.playerOnX] == 0:
+                print("Y")
+            pass
 
     @staticmethod
     def exit(boy, event):
@@ -51,8 +59,11 @@ class IdleState:
 
     @staticmethod
     def do(boy):
-        boy.frame = (boy.frame+(180*(boy.MusicBpm/60)*game_framework.frame_time)) % 180
+        boy.frame = (boy.frame+(180*(boy.MusicBpm/60)*game_framework.frame_time))
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
+        if boy.frame >= 180:
+            boy.frame = boy.frame % 180
+            boy.cur_state.enter(boy, Recursion)
         if (boy.keyDown == True):
             boy.CtrlDown = 3
         else:
@@ -70,7 +81,10 @@ class RunState:
 
     @staticmethod
     def enter(boy, event):
-        if event == RIGHT_DOWN:
+        if event == Recursion:
+
+            pass
+        elif event == RIGHT_DOWN:
             if boy.jumpHeight <= 30:
                 if (boy.keyDown == True):
                     boy.CtrlDown = 3
@@ -130,7 +144,9 @@ class RunState:
         if boy.bangle < 90 or boy. bangle > 270:
             boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
             boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
-
+        if boy.frame >= 180:
+            boy.frame = boy.frame % 180
+            boy.cur_state.enter(boy, Recursion)
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
 
         if boy.bangle > 90 and boy.bangle < 270: # end
@@ -163,9 +179,9 @@ class RunState:
 
 
 next_state_table = {
-    IdleState: {RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState,
+    IdleState: {RIGHT_DOWN: RunState, LEFT_DOWN: RunState, Recursion: IdleState,
                 UP_DOWN: RunState, DOWN_DOWN: RunState,TimeUp: IdleState},
-    RunState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, SPACE: RunState,
+    RunState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, Recursion: RunState,
                UP_DOWN: RunState, DOWN_DOWN: RunState,TimeUp: IdleState},
 }
 
@@ -175,6 +191,8 @@ class Boy:
         self.x, self.y = 25, 60
         self.exX = 0
         self.exY = 0
+        self.playerOnX = 0
+        self.playerOnY = 0
         self.image = load_image('Player\\player.png')
         self.power = load_image('Player\\power.png')
         # Boy is only once created, so instance image loading is fine
@@ -228,11 +246,3 @@ class Boy:
             self.keyDown = True
         elif (event.type, event.key) == (SDL_KEYUP, SDLK_RCTRL):
             self.keyDown = False
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LSHIFT):
-            self.teleportDir = -1
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RSHIFT):
-            self.teleportDir = 1
-        elif (event.type, event.key) == (SDL_KEYUP, SDLK_LSHIFT):
-            self.teleportDir = 0
-        elif (event.type, event.key) == (SDL_KEYUP, SDLK_RSHIFT):
-            self.teleportDir = 0

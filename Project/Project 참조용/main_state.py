@@ -6,16 +6,15 @@ from pico2d import *
 import game_framework
 import game_world
 
-from boy import Boy
+import boy
 from grass import Grass
 from Blocks import Blocks
 
 name = "MainState"
 
-boy = None
+by = None
 BGM = None
 TimeCut = []
-Mapper = []
 order = 0
 
 class Stage1_Bgm:
@@ -25,12 +24,12 @@ class Stage1_Bgm:
         self.bgm.repeat_play()
 
 def enter():
-    global boy, BGM
+    global by, BGM
     #파일에서 데이터 받아와서 미리 저장하기
-    boy = Boy()
+    by = boy.Boy()
     grass = Grass()
     game_world.add_object(grass, 0)
-    game_world.add_object(boy, 2)
+    game_world.add_object(by, 2)
     mapper()
     if BGM is None:
         BGM = Stage1_Bgm()
@@ -38,7 +37,7 @@ def enter():
         BGM.bgm.repeat_play()
 
 def mapper():
-    global TimeCut, Mapper
+    global TimeCut
     input = open("tile\\map.txt", "rt")
     A = []
     LineOfFile = 0
@@ -52,24 +51,24 @@ def mapper():
         else:
             for b in A[line]:
                 x = int(b)
-                Mapper.append(x)
+                boy.Mapper.append(x)
 
     TimeCut.append(999) # type Music Length
 
 
 def MakeMap():
-    global TimeCut, Mapper, order
+    global TimeCut, order
     xl = 0
     if get_time() < TimeCut[order]:
         pass
     else:
         order += 1
         # block class make and mapping in here
-        # by using order in Mapper, can print block in time.
+        # by using order in Mapper, can print block in real time.
         game_world.remove_object_by_line(1)
         for yLine in range(0, 12):
             for xLine in range(0, 20):
-                tile = Blocks(xLine * 50 + 25, 600 - (yLine+1) * 50 + 25, Mapper[(order-1)*240 + xl])
+                tile = Blocks(xLine * 50 + 25, 600 - (yLine+1) * 50 + 25, boy.Mapper[(order-1)*240 + xl])
                 game_world.add_object(tile, 1)
                 xl += 1
 
@@ -96,7 +95,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
                 game_framework.quit()
         else:
-            boy.handle_event(event)
+            by.handle_event(event)
 
 
 def update():
