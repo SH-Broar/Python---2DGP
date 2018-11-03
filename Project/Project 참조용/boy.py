@@ -23,18 +23,16 @@ FRAMES_PER_ACTION = 8
 
 
 # Boy Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, UP_DOWN, DOWN_DOWN, UP_UP, DOWN_UP, SPACE, TimeUp = range(10)
+RIGHT_DOWN, LEFT_DOWN, UP_DOWN, DOWN_DOWN, SPACE, TimeUp = range(6)
 
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
     (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
-    (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
-    (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
+
     (SDL_KEYDOWN, SDLK_UP): UP_DOWN,
     (SDL_KEYDOWN, SDLK_DOWN): DOWN_DOWN,
-    (SDL_KEYUP, SDLK_UP): UP_UP,
-    (SDL_KEYUP, SDLK_DOWN): DOWN_UP,
+
     (SDL_KEYDOWN, SDLK_SPACE): SPACE
 }
 
@@ -45,14 +43,6 @@ class IdleState:
 
     @staticmethod
     def enter(boy, event):
-        if event == RIGHT_DOWN:
-            boy.velocity += RUN_SPEED_PPS
-        elif event == LEFT_DOWN:
-            boy.velocity -= RUN_SPEED_PPS
-        elif event == RIGHT_UP:
-            boy.velocity -= RUN_SPEED_PPS
-        elif event == LEFT_UP:
-            boy.velocity += RUN_SPEED_PPS
         boy.prevTime = get_time()
 
     @staticmethod
@@ -91,7 +81,6 @@ class RunState:
                 boy.dir = 1
                 boy.bangle = 0
                 boy.exX = boy.x
-                boy.velocity += RUN_SPEED_PPS
             elif boy.bangle is 0:
                 boy.cur_state = IdleState
                 boy.cur_state.enter(boy, TimeUp)
@@ -104,23 +93,37 @@ class RunState:
                 boy.dir = -1
                 boy.bangle = 0
                 boy.exX = boy.x
-                boy.velocity -= RUN_SPEED_PPS
             elif boy.bangle is 0:
                 boy.cur_state = IdleState
                 boy.cur_state.enter(boy, TimeUp)
-        elif event == RIGHT_UP:
-            boy.velocity -= RUN_SPEED_PPS
-        elif event == LEFT_UP:
-            boy.velocity += RUN_SPEED_PPS
+        elif event == UP_DOWN:
+            if boy.jumpHeight <= 30:
+                if boy.keyDown == True:
+                    boy.CtrlDown = 3
+                else:
+                    boy.CtrlDown = 1
+                boy.dir = 2
+                boy.bangle = 0
+                boy.exY = boy.y
+            elif boy.bangle is 0:
+                boy.cur_state = IdleState
+                boy.cur_state.enter(boy, TimeUp)
+        elif event == DOWN_DOWN:
+            if boy.jumpHeight <= 30:
+                if boy.keyDown == True:
+                    boy.CtrlDown = 3
+                else:
+                    boy.CtrlDown = 1
+                boy.dir = -2
+                boy.bangle = 0
+                boy.exY = boy.y
+            elif boy.bangle is 0:
+                boy.cur_state = IdleState
+                boy.cur_state.enter(boy, TimeUp)
 
     @staticmethod
     def exit(boy, event):
-        if event == SPACE:
-            boy.fire_ball()
-        if event == LEFT_DOWN or RIGHT_DOWN:
-            pass
-        if event == TimeUp:
-            pass
+        pass
 
 
     @staticmethod
@@ -135,6 +138,7 @@ class RunState:
         if boy.bangle > 90 and boy.bangle < 270: # end
         #{
             boy.exX = boy.x
+            boy.exY = boy.y
             boy.angle = boy.angle - 45
             boy.angle = boy.angle - (boy.angle % 90) + 90
             boy.dir = 0
@@ -147,6 +151,10 @@ class RunState:
             boy.x = boy.exX + boy.bangle / 90 * 51 * boy.CtrlDown
         elif boy.dir == -1:
             boy.x = boy.exX - (360 - boy.bangle) / 90 * 51 * boy.CtrlDown
+        elif boy.dir == 2:
+            boy.y = boy.exY + boy.bangle / 90 * 51 * boy.CtrlDown
+        elif boy.dir == -2:
+            boy.y = boy.exY - (360 - boy.bangle) / 90 * 51 * boy.CtrlDown
 
 
     @staticmethod
@@ -157,10 +165,10 @@ class RunState:
 
 
 next_state_table = {
-    IdleState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState,
-                UP_UP: IdleState, DOWN_UP: IdleState, UP_DOWN: RunState, DOWN_DOWN: RunState,TimeUp: IdleState},
-    RunState: {RIGHT_UP: RunState, LEFT_UP: RunState, LEFT_DOWN: RunState, RIGHT_DOWN: RunState, SPACE: RunState,
-               UP_UP: IdleState, DOWN_UP: IdleState, UP_DOWN: RunState, DOWN_DOWN: RunState,TimeUp: IdleState},
+    IdleState: {RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState,
+                UP_DOWN: RunState, DOWN_DOWN: RunState,TimeUp: IdleState},
+    RunState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, SPACE: RunState,
+               UP_DOWN: RunState, DOWN_DOWN: RunState,TimeUp: IdleState},
 }
 
 class Boy:
@@ -168,6 +176,7 @@ class Boy:
     def __init__(self):
         self.x, self.y = 25, 60
         self.exX = 0
+        self.exY = 0
         self.image = load_image('Player\\player.png')
         self.power = load_image('Player\\power.png')
         # Boy is only once created, so instance image loading is fine
