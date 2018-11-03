@@ -50,6 +50,7 @@ class IdleState:
         elif event == LEFT_UP:
             boy.velocity += RUN_SPEED_PPS
         boy.prevTime = get_time()
+        print("**IN**")
 
     @staticmethod
     def exit(boy, event):
@@ -78,24 +79,20 @@ class RunState:
     @staticmethod
     def enter(boy, event):
         if event == RIGHT_DOWN:
-            boy.keyF = True
             if boy.jumpHeight <= 30:
                 boy.dir = 1
                 boy.bangle = 0
                 boy.exX = boy.x
                 boy.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
-
             if boy.jumpHeight <= 30:
                 boy.dir = -1
                 boy.bangle = 0
                 boy.exX = boy.x
                 boy.velocity -= RUN_SPEED_PPS
         elif event == RIGHT_UP:
-            boy.keyF = False
             boy.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
-            boy.keyF = False
             boy.velocity += RUN_SPEED_PPS
 
 
@@ -111,27 +108,31 @@ class RunState:
             boy.dir = 0
             boy.bangle = 0
         if event == TimeUp:
-            boy.exX = boy.x
-            boy.angle = boy.angle - 45
-            boy.angle = boy.angle - (boy.angle % 90) + 90
-            boy.dir = 0
-            boy.bangle = 0
+            pass
+
 
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + (180 * (boy.MusicBpm / 60) * game_framework.frame_time)) % 180
         if boy.bangle < 90 or boy. bangle > 270:
             boy.angle = (boy.angle - (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
-        boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
+            boy.bangle = (boy.bangle + (90 * (boy.MusicBpm / 60) * game_framework.frame_time) * boy.dir) % 360
 
         boy.jumpHeight = math.sin(boy.frame * 3.14 / 180) * 100
 
-        if boy.bangle > 90 and boy.bangle < 270 and boy.keyF == False:
-            boy.add_event(TimeUp)
+        if boy.bangle > 90 and boy.bangle < 270:
+            boy.exX = boy.x
+            boy.angle = boy.angle - 45
+            boy.angle = boy.angle - (boy.angle % 90) + 90
+            boy.dir = 0
+            boy.bangle = 0
+            boy.cur_state = IdleState
+            boy.cur_state.enter(boy,TimeUp)
+            #boy.add_event(TimeUp)
         if boy.dir == 1:
-            boy.x = boy.exX + boy.bangle / 90 * 50
+            boy.x = boy.exX + boy.bangle / 90 * 50 * boy.CtrlDown
         elif boy.dir == -1:
-            boy.x = boy.exX - (360 - boy.bangle) / 90 * 50
+            boy.x = boy.exX - (360 - boy.bangle) / 90 * 50 * boy.CtrlDown
 
 
     @staticmethod
@@ -156,10 +157,9 @@ class Boy:
         self.dir = 0
         self.velocity = 0
         #
-        self.MusicBpm = 100
+        self.MusicBpm = 126
         #
         self.keyDown = False
-        self.keyF = False
         self.CtrlDown = 1
         self.frame = 0      #점프용
         self.jumpHeight = 0
