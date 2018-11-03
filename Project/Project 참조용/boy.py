@@ -23,7 +23,7 @@ FRAMES_PER_ACTION = 8
 
 
 # Boy Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SPACE, TimeUp = range(6)
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, UP_DOWN, DOWN_DOWN, UP_UP, DOWN_UP, SPACE, TimeUp = range(10)
 
 
 key_event_table = {
@@ -31,6 +31,10 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
     (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
     (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
+    (SDL_KEYDOWN, SDLK_UP): UP_DOWN,
+    (SDL_KEYDOWN, SDLK_DOWN): DOWN_DOWN,
+    (SDL_KEYUP, SDLK_UP): UP_UP,
+    (SDL_KEYUP, SDLK_DOWN): DOWN_UP,
     (SDL_KEYDOWN, SDLK_SPACE): SPACE
 }
 
@@ -88,6 +92,9 @@ class RunState:
                 boy.bangle = 0
                 boy.exX = boy.x
                 boy.velocity += RUN_SPEED_PPS
+            elif boy.bangle is 0:
+                boy.cur_state = IdleState
+                boy.cur_state.enter(boy, TimeUp)
         elif event == LEFT_DOWN:
             if boy.jumpHeight <= 30:
                 if boy.keyDown == True:
@@ -98,6 +105,9 @@ class RunState:
                 boy.bangle = 0
                 boy.exX = boy.x
                 boy.velocity -= RUN_SPEED_PPS
+            elif boy.bangle is 0:
+                boy.cur_state = IdleState
+                boy.cur_state.enter(boy, TimeUp)
         elif event == RIGHT_UP:
             boy.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
@@ -143,12 +153,14 @@ class RunState:
     def draw(boy):
         boy.image.rotate_draw(boy.angle * 3.14 / 180, boy.x, boy.y + boy.jumpHeight, 50, 50)
         if (boy.keyDown == True):
-            boy.power.rotate_draw(-boy.frame* 3.14 / 360,boy.x, boy.y + boy.jumpHeight, 120, 120)
+            boy.power.rotate_draw(-boy.bangle* 3.14 / 180,boy.x, boy.y + boy.jumpHeight, 120, 120)
 
 
 next_state_table = {
-    IdleState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState, TimeUp: IdleState},
-    RunState: {RIGHT_UP: RunState, LEFT_UP: RunState, LEFT_DOWN: RunState, RIGHT_DOWN: RunState, SPACE: RunState, TimeUp: IdleState},
+    IdleState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState,
+                UP_UP: IdleState, DOWN_UP: IdleState, UP_DOWN: RunState, DOWN_DOWN: RunState,TimeUp: IdleState},
+    RunState: {RIGHT_UP: RunState, LEFT_UP: RunState, LEFT_DOWN: RunState, RIGHT_DOWN: RunState, SPACE: RunState,
+               UP_UP: IdleState, DOWN_UP: IdleState, UP_DOWN: RunState, DOWN_DOWN: RunState,TimeUp: IdleState},
 }
 
 class Boy:
