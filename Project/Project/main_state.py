@@ -104,7 +104,10 @@ def update():
     MakeMap()
     for game_object in game_world.all_objects():
         game_object.update()
-    # fill here
+    for game_object in game_world.object_in_line(3):
+        if game_world.collide(game_object,by) == True:
+            #game over branch
+            pass
 
 
 

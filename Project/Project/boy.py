@@ -261,6 +261,10 @@ class Boy:
 
     def draw(self):
         self.cur_state.draw(self)
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return self.x - 25, self.y - 25 + self.jumpHeight, self.x + 25, self.y + 25 + self.jumpHeight
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
