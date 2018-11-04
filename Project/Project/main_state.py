@@ -76,8 +76,8 @@ def MakeMap():
                 xl += 1
 
 def SpreadBullet():
-    if ((get_time() - EnterTime) // 0.03) % 10000 == 0:
-        bullets = shooter(2,3,800,150,180,100)
+    if ((get_time() - EnterTime) / 10) < 1:
+        bullets = shooter(2,1,800,300 + math.sin(get_time()*2)*150,180,300)
         game_world.add_object(bullets, 3)
     pass
 
