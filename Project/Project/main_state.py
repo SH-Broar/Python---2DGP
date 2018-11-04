@@ -19,6 +19,7 @@ TimeCut = []
 
 bulletDict = [[],[],[],[],[],[]]
 bulletTime = []
+bulletTimeIndex = 0
 
 EnterTime = 0
 
@@ -56,15 +57,11 @@ def bulletRegister():
         b = A[line].split()
         for text in b:
             if i == 6:
+                bulletTime.append(int(text))
                 i = 0
                 continue
             bulletDict[i].append(int(text))
             i = i + 1
-            if i == 6:
-                bulletTime.append(int(text))
-
-    print(bulletDict)
-    print(bulletTime)
     pass
 
 
@@ -105,8 +102,12 @@ def MakeMap():
                 xl += 1
 
 def SpreadBullet():
-    if ((get_time() - EnterTime) / 10) < 1:
-        bullets = shooter(2,1,800,300 + math.sin(get_time()*2)*150,180,300)
+    global bulletTimeIndex, bulletTime, bulletDict
+    if get_time() - EnterTime < bulletTime[bulletTimeIndex]:
+        pass
+    else:
+        bullets = shooter(bulletDict[0][bulletTimeIndex],bulletDict[1][bulletTimeIndex],bulletDict[2][bulletTimeIndex],bulletDict[3][bulletTimeIndex],bulletDict[4][bulletTimeIndex],bulletDict[5][bulletTimeIndex])
+        bulletTimeIndex += 1
         game_world.add_object(bullets, 3)
     pass
 
