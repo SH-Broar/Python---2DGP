@@ -22,7 +22,7 @@ def exit():
     global BackgroundImage
     global START
     global END
-    del(BackgroundImage)
+    del BackgroundImage
     del(START)
     del(END)
 

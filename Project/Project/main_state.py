@@ -16,6 +16,8 @@ by = None
 BGM = None
 TimeCut = []
 
+EnterTime = 0
+
 class Stage1_Bgm:
     def __init__(self):
         self.bgm = load_music('1City.mp3')
@@ -23,12 +25,13 @@ class Stage1_Bgm:
         self.bgm.repeat_play()
 
 def enter():
-    global by, BGM
+    global by, BGM, EnterTime
     #파일에서 데이터 받아와서 미리 저장하기
     by = boy.Boy()
     grass = Grass()
     game_world.add_object(grass, 0)
     game_world.add_object(by, 2)
+    EnterTime = get_time()
     mapper()
     if BGM is None:
         BGM = Stage1_Bgm()
@@ -56,9 +59,9 @@ def mapper():
 
 
 def MakeMap():
-    global TimeCut
+    global TimeCut, EnterTime
     xl = 0
-    if get_time() < TimeCut[boy.order]:
+    if get_time() - EnterTime < TimeCut[boy.order]:
         pass
     else:
         boy.order += 1
