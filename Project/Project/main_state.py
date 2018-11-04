@@ -7,6 +7,7 @@ import game_framework
 import game_world
 
 import boy
+from shooter import shooter
 from grass import Grass
 from Blocks import Blocks
 
@@ -74,7 +75,11 @@ def MakeMap():
                 game_world.add_object(tile, 1)
                 xl += 1
 
-
+def SpreadBullet():
+    if ((get_time() - EnterTime) // 0.03) % 10000 == 0:
+        bullets = shooter(2,3,800,150,180,100)
+        game_world.add_object(bullets, 3)
+    pass
 
 def exit():
     global BGM
@@ -102,10 +107,12 @@ def handle_events():
 
 def update():
     MakeMap()
+    SpreadBullet()
     for game_object in game_world.all_objects():
         game_object.update()
     for game_object in game_world.object_in_line(3):
         if game_world.collide(game_object,by) == True:
+            game_world.remove_object(game_object)
             #game over branch
             pass
 
