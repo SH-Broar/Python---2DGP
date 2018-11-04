@@ -49,10 +49,20 @@ class IdleState:
             global Mapper
             boy.playerOnX = int((boy.x + 50) // 50)
             boy.playerOnY = int((boy.y + 25) // 50)
+            if boy.playerOnX <= 0 or boy.playerOnX >= 21 or boy.playerOnY <= 0 or boy.playerOnY >= 13:
+                game_world.remove_object(boy)
+                #gameover branch - state change
+                pass
             if Mapper[(order-1) * 240 + (12 - boy.playerOnY) * 20 + boy.playerOnX-1] == 0:
+                track = False
                 for i in range(1,boy.playerOnY):
                     if Mapper[(order-1) * 240 + (12 - i) * 20 + boy.playerOnX-1] != 0:
                         boy.y = i * 50
+                        track = True
+                if track is False:
+                    game_world.remove_object(boy)
+                    #gameover branch
+                    pass
 
     @staticmethod
     def exit(boy, event):
@@ -85,12 +95,22 @@ class RunState:
         global Mapper
         boy.playerOnX = int((boy.x + 50) // 50)
         boy.playerOnY = int((boy.y + 25) // 50)
+        if boy.playerOnX <= 0 or boy.playerOnX >= 21 or boy.playerOnY <= 0 or boy.playerOnY >= 13:
+            game_world.remove_object(boy)
+            # gameover branch - state change
+            pass
         if Mapper[(order-1) * 240 + (12 - boy.playerOnY) * 20 + boy.playerOnX-1] == 0:
+            track = False
             for i in range(1,boy.playerOnY):
                 if Mapper[(order-1) * 240 + (12 - i) * 20 + boy.playerOnX-1] != 0:
                     boy.y = i * 50
                     boy.frame = boy.frame % 180
                     boy.cur_state.enter(boy, IdleState)
+                    track = True
+            if track is False:
+                game_world.remove_object(boy)
+                #gameover branch
+                pass
 
         elif event == RIGHT_DOWN:
             if boy.jumpHeight <= 30:
