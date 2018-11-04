@@ -17,6 +17,9 @@ by = None
 BGM = None
 TimeCut = []
 
+bulletDict = [[],[],[],[],[],[]]
+bulletTime = []
+
 EnterTime = 0
 
 class Stage1_Bgm:
@@ -27,17 +30,31 @@ class Stage1_Bgm:
 
 def enter():
     global by, BGM, EnterTime
-    #파일에서 데이터 받아와서 미리 저장하기
     by = boy.Boy()
     grass = Grass()
     game_world.add_object(grass, 0)
     game_world.add_object(by, 2)
     EnterTime = get_time()
     mapper()
+    bulletRegister()
     if BGM is None:
         BGM = Stage1_Bgm()
     else:
         BGM.bgm.repeat_play()
+
+def bulletRegister():
+    input = open("shooter\\bullet.txt","rt")
+    A = []
+    LineOfFile = 0
+    for line in input:
+        A.append(line.strip())
+        LineOfFile += 1
+    input.close()
+    for line in range(LineOfFile):
+        for b in A[line]:
+            print(b)
+    pass
+
 
 def mapper():
     global TimeCut
