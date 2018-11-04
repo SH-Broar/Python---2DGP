@@ -43,16 +43,28 @@ def enter():
         BGM.bgm.repeat_play()
 
 def bulletRegister():
+    global bulletDict, bulletTime
     input = open("shooter\\bullet.txt","rt")
     A = []
     LineOfFile = 0
+    i = 0
     for line in input:
         A.append(line.strip())
         LineOfFile += 1
     input.close()
     for line in range(LineOfFile):
-        for b in A[line]:
-            print(b)
+        b = A[line].split()
+        for text in b:
+            if i == 6:
+                i = 0
+                continue
+            bulletDict[i].append(int(text))
+            i = i + 1
+            if i == 6:
+                bulletTime.append(int(text))
+
+    print(bulletDict)
+    print(bulletTime)
     pass
 
 
