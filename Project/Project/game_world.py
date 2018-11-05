@@ -15,7 +15,7 @@ def remove_object(o):
         if o in objects[i]:
             objects[i].remove(o)
             del o
-            return
+            break
 
 def remove_object_by_line(num):
     for i in objects[num][::-1]:
