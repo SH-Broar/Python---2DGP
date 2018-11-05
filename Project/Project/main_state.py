@@ -56,6 +56,8 @@ def bulletRegister():
     for line in range(LineOfFile):
         b = A[line].split()
         for text in b:
+            if text == '//':
+                continue
             if i == 6:
                 bulletTime.append(int(text))
                 i = 0
