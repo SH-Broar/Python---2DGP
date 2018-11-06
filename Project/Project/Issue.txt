@@ -1,3 +1,0 @@
-TODO : Opening Image
-	Particle
-	Game Over map
