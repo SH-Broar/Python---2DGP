@@ -69,7 +69,6 @@ class InfiniteBackground:
         self.q1w = self.q4w
         self.q1h = self.q2h
 
-
     def handle_event(self, event):
         pass
 
