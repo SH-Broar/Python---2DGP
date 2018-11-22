@@ -8,13 +8,26 @@ import game_world
 
 from boy import Boy
 from background import FixedBackground as Background
+from ball import Ball
 #from background import InfiniteBackground as Background
 
 name = "MainState"
 
 boy = None
 background = None
+balls = []
 
+def collide(a, b):
+    # fill here
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
 
 def enter():
     global boy
@@ -28,6 +41,10 @@ def enter():
 
     background.set_center_object(boy)
     boy.set_background(background)
+
+    global balls
+    balls = [Ball() for i in range(10)]
+    game_world.add_objects(balls, 1)
 
 
 def exit():
@@ -55,7 +72,11 @@ def handle_events():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
-
+    for ball in balls:
+        if collide(boy, ball):
+            balls.remove(ball)
+            boy.eat(ball)
+            game_world.remove_object(ball)
 
 def draw():
     clear_canvas()

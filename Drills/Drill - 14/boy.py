@@ -121,6 +121,7 @@ class Boy:
 
         self.eat_sound = load_wav('pickup.wav')
         self.eat_sound.set_volume(32)
+        self.eat_num = 0
 
     def get_bb(self):
         return self.x - 50, self.y - 50, self.x + 50, self.y + 50
