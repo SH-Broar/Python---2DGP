@@ -70,12 +70,12 @@ class WalkingState:
         boy.x += boy.x_velocity * game_framework.frame_time
         boy.y += boy.y_velocity * game_framework.frame_time
 
-        boy.x = clamp(10 + (boy.y/boy.bg.h) * 200, boy.x, boy.bg.w-10 - (boy.y/boy.bg.h) * 200)
-        boy.y = clamp(70, boy.y, boy.bg.h-70)
+        boy.x = clamp(400, boy.x, 1430)
+        boy.y = clamp(300, boy.y, 800)
 
     @staticmethod
     def draw(boy):
-        cx, cy = boy.x - boy.bg.window_left, boy.y - boy.bg.window_bottom
+        cx, cy = boy.canvas_width // 2, boy.canvas_height // 2
         if boy.x_velocity > 0:
             boy.image.clip_draw(int(boy.frame) * 100, 100, 100, 100, cx, cy)
             boy.dir = 1
@@ -124,8 +124,11 @@ class Boy:
         self.eat_num = 0
 
     def get_bb(self):
-        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+        return 400 - 50, 300 - 50, 400 + 50, 300 + 50
 
+    def eat(self, ball):
+        self.eat_sound.play()
+        self.eat_num += 1
 
     def set_background(self, bg):
         self.bg = bg
@@ -145,7 +148,8 @@ class Boy:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(self.x - self.bg.window_left - 75,self.y - self.bg.window_bottom + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
+        self.font.draw(self.x - self.bg.window_left - 25 ,self.y - self.bg.window_bottom + 60, '%3d' % self.eat_num, (255, 255, 0))
+        draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
