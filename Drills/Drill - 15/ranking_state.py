@@ -13,11 +13,13 @@ boy = None
 
 
 name = "RankingState"
-
+font = None
 menu = None
 
 def enter():
-    global menu
+    global menu,font
+    if font is None:
+        font = load_font('ENCR10B.TTF', 20)
     menu = load_image('menu.png')
     hide_cursor()
     hide_lattice()

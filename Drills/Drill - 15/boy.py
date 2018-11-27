@@ -131,7 +131,7 @@ class Boy:
         self.__name__ = 'boy'
 
     def __getstate__(self):
-        state = {'x': self.x, 'y': self.y, 'dir': self.dir, 'cur_state': self.cur_state}
+        state = {'x': self.x, 'y': self.y, 'dir': self.dir, 'cur_state': self.cur_state, 'time': (get_time() - self.start_time)}
         return state
         pass
 
