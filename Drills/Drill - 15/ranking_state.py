@@ -8,6 +8,7 @@ import game_framework
 import game_world
 
 import main_state
+import world_build_state as start_state
 
 boy = None
 rankdata = []
@@ -49,7 +50,9 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-                game_framework.quit()
+            show_cursor()
+            show_lattice()
+            game_framework.change_state(start_state)
 
 def update():
 

@@ -9,6 +9,7 @@ import game_world
 
 import world_build_state
 import ranking_state
+from zombie import Zombie
 
 name = "MainState"
 
@@ -63,8 +64,7 @@ def update():
         game_object.update()
     for game_object in game_world.all_objects():
         if collide(boy, game_object):
-            print(game_object.__name__)
-            if game_object.__name__ is 'zombie':
+            if isinstance(game_object, Zombie):
                 game_world.remove_object(game_object)
 
                 with open('ranking.json') as f:
