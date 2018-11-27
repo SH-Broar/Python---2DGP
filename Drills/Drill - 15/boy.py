@@ -115,7 +115,7 @@ class Boy:
     font = None
 
     def __init__(self):
-        self.x, self.y = 1280 // 2, 1024 // 2
+        self.x, self.y = 1000 // 2, 666 // 2
         # Boy is only once created, so instance image loading is fine
         if Boy.image is None:
             Boy.image = load_image('animation_sheet.png')

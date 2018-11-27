@@ -8,6 +8,7 @@ import game_framework
 import game_world
 
 import world_build_state
+import ranking_state
 
 name = "MainState"
 
@@ -65,7 +66,7 @@ def update():
             print(game_object.__name__)
             if game_object.__name__ is 'zombie':
                 game_world.remove_object(game_object)
-
+                game_framework.change_state(ranking_state)
                 pass
 
 

@@ -20,7 +20,7 @@ def enter():
     global menu,font
     if font is None:
         font = load_font('ENCR10B.TTF', 20)
-    menu = load_image('menu.png')
+    menu = load_image('ranking.png')
     hide_cursor()
     hide_lattice()
 
@@ -49,8 +49,12 @@ def update():
     pass
 
 def draw():
+    global font
     clear_canvas()
     menu.draw(get_canvas_width()//2, get_canvas_height()//2)
+
+    for i in range(1,10):
+        font.draw(50, 150 + i*50, 'WTF', (0, 0, 0))
     update_canvas()
 
 
