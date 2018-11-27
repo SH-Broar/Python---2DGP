@@ -28,7 +28,7 @@ def enter():
         data_list = json.load(f)
 
     data = data_list["Ranking"]
-    data.sort()
+    data.sort(reverse=True)
 
 def exit():
     global menu
@@ -60,14 +60,13 @@ def draw():
     clear_canvas()
     menu.draw(get_canvas_width()//2, get_canvas_height()//2)
 
-    tick = 10
     if len(data) < 10:
-        for i in range(1,len(data)):
-            font.draw(50, 50 + i*50, str(data[i]), (0, 0, 0))
+        for i in range(0,len(data)):
+            font.draw(50, 500 - i*50, str(data[i]), (0, 0, 0))
         update_canvas()
     else:
-        for i in range(1, 10):
-            font.draw(50, 50 + i * 50, str(data[i]), (0, 0, 0))
+        for i in range(0, 10):
+            font.draw(50, 500 - i*50, str(data[i]), (0, 0, 0))
         update_canvas()
 
 
