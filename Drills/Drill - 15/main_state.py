@@ -66,6 +66,17 @@ def update():
             print(game_object.__name__)
             if game_object.__name__ is 'zombie':
                 game_world.remove_object(game_object)
+
+                with open('ranking.json') as f:
+                    rankingdata = json.load(f)
+                tempdata = rankingdata["Ranking"]
+                tempdata.append(get_time() - boy.start_time)
+
+                rankingdata["Ranking"] = tempdata
+                json.dumps(rankingdata)
+                with open('ranking.json', 'w', encoding="utf-8") as make_file:
+                    json.dump(rankingdata, make_file, ensure_ascii=False, indent="\t")
+
                 game_framework.change_state(ranking_state)
                 pass
 
